@@ -6,11 +6,11 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: ../login.php");
     exit();
 }
-include 'includes/st_sidebar.php';
+include 'includes/sv_sidebar.php';
 
 ?>
 
-<p>st appointment</p>
+<p>Appointment</p>
 
 <!-- content end -->
 </div>

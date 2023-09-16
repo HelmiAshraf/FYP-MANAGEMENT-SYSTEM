@@ -30,14 +30,33 @@
                     <?php
                     include '../db.php';
 
-                    $sql = "SELECT * FROM supervisor";
+                    $sql = "SELECT
+                    s.sv_id,
+                    s.sv_name,
+                    s.sv_email,
+                    s.sv_phnum,
+                    s.sv_expertise,
+                    s.sv_image,
+                    s.sv_status,
+                    s.sv_quota,
+                    COUNT(v.supervisor_id) AS current_students
+                FROM
+                    supervisor s
+                LEFT JOIN
+                    supervise v ON s.sv_id = v.supervisor_id
+                GROUP BY
+                    s.sv_id, s.sv_name, s.sv_email, s.sv_phnum, s.sv_expertise, s.sv_image, s.sv_status, s.sv_quota
+                HAVING
+                    current_students <= s.sv_quota;";
+
                     $result = $conn->query($sql);
 
                     if ($result->num_rows > 0) {
                         while ($row = $result->fetch_assoc()) {
                             echo "<tr>";
+                            echo "<td class='py-2 px-4 border border-gray-300'>" . $row["supervisor_image"] . "</td>";
                             echo "<td class='py-2 px-4 border border-gray-300'>" . $row["supervisor_name"] . "</td>";
-                            echo "<td class='py-2 px-4 border border-gray-300'>" . $row["supervisor_PHnumber"] . "</td>";
+                            echo "<td class='py-2 px-4 border border-gray-300'>" . $row["supervisor_phnum"] . "</td>";
                             echo "<td class='py-2 px-4 border border-gray-300'>" . $row["supervisor_email"] . "</td>";
                             echo "<td class='py-2 px-4 border border-gray-300'>" . $row["supervisor_faculty"] . "</td>";
                             echo "<td class='py-2 px-4 border border-gray-300'>" . $row["supervisor_expertise"] . "</td>";
