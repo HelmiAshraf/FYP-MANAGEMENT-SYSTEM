@@ -42,27 +42,27 @@ if ($result->num_rows > 0) {
         // Display project details in HTML template
 ?>
 
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg p-4 bg-white dark:bg-gray-800 dark:text-gray-400">
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg p-4 bg-gray-800 text-gray-400">
             <ul class="flex text-sm">
                 <li class="mr-2">
-                    <p class="text-base font-semibold text-gray-900 dark:text-white">
+                    <p class="text-base font-semibold text-white">
                         Project Title :
                     </p>
                 </li>
                 <li>
-                    <p class=" mb-3 text-base text-gray-900 dark:text-gray-200">
+                    <p class=" mb-3 text-base text-gray-200">
                         <?php echo $row['project_title']; ?>
                     </p>
                 </li>
             </ul>
             <ul class="text-sm">
                 <li class="mr-2">
-                    <p class="text-base font-semibold text-gray-900 dark:text-white">
+                    <p class="text-base font-semibold text-white">
                         Project Description :
                     </p>
                 </li>
                 <li>
-                    <p class=" mb-3 text-base text-gray-900 dark:text-gray-200">
+                    <p class=" mb-3 text-base text-gray-200">
                         <?php echo $row['project_description']; ?>
                     </p>
                 </li>
@@ -73,10 +73,10 @@ if ($result->num_rows > 0) {
                     <input type="text" name="student_id" value="<?php echo $student_id; ?>">
                     <input type="text" name="supervisor_id" value="<?php echo $_SESSION['user_id']; ?>">
                     <!-- "Accept" button -->
-                    <button type="submit" name="accept" value="accept" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Accept</button>
+                    <button type="submit" name="accept" value="accept" class="focus:outline-none text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 bg-green-700 hover:bg-green-600 focus:ring-green-800">Accept</button>
 
                     <!-- "Reject" button -->
-                    <button type="submit" name="reject" value="reject" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Reject</button>
+                    <button type="submit" name="reject" value="reject" class="focus:outline-none text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 bg-red-700 hover:bg-red-600 focus:ring-red-800">Reject</button>
                 </form>
             </div>
         </div>

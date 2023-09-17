@@ -1,14 +1,6 @@
 <?php
-session_start();
 
-// Check if the user is logged in; if not, redirect to the login page
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit();
-}
 include 'includes/sidebar.php';
-
-include 'db.php'; // Include your database connection file
 
 // Get the sv_id from the URL parameter
 $sv_id = $_GET['sv_id'];
