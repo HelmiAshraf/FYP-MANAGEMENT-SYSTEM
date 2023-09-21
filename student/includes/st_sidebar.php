@@ -14,13 +14,13 @@ include '../db.php';
 $user_id = $_SESSION['user_id']; // Assuming you store the login ID in a session variable
 
 // Prepare and execute a query to retrieve user details
-$sql = "SELECT st_name, st_email, TO_BASE64(st_image) AS st_image_base64 FROM student WHERE st_id = ?";
+$sql = "SELECT st_name, st_email,st_class, TO_BASE64(st_image) AS st_image_base64 FROM student WHERE st_id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $user_id);
 
 if ($stmt->execute()) {
     // Bind the results to variables
-    $stmt->bind_result($user_name, $user_email, $st_image_base64);
+    $stmt->bind_result($user_name, $user_email,$user_class, $st_image_base64);
 
     // Fetch the data
     $stmt->fetch();
@@ -66,35 +66,49 @@ if ($stmt->execute()) {
                 <div class="flex items-center">
                     <div class="flex items-center ml-3">
                         <div>
+                            <p class="text-sm text-gray-300 font-semibold" role="none">
+                                <?php echo $user_class; // Display the user's name 
+                                ?>
+                            </p>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm text-gray-300 font-semibold" role="none">
+                                <?php echo $user_name; // Display the user's name 
+                                ?>
+                            </p>
+                        </div>
+                        <div class="ml-4">
                             <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
                                 <span class="sr-only">Open user menu</span>
                                 <img class="w-8 h-8 rounded-full" src="data:image/jpeg;base64,<?php echo $st_image_base64; ?>" alt="User Photo">
                             </button>
                         </div>
-                        <div class="z-50 hidden my-4 text-base list-none divide-y rounded shadow bg-gray-700 divide-gray-600" id="dropdown-user">
-                            <div class="px-4 py-3" role="none">
-                                <p class="text-sm text-white" role="none">
-                                    <?php echo $user_name; // Display the user's name 
-                                    ?>
-                                </p>
-                                <p class="text-sm font-medium truncate text-gray-300" role="none">
-                                    <?php echo $user_email; // Display the user's email 
-                                    ?>
-                                </p>
-                            </div>
-                            <ul class="py-1" role="none">
-                                <li>
-                                    <a href="./st_profile.php" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white" role="menuitem">Profile</a>
-                                </li>
-                                <li>
-                                    <a href=".././logout.php" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white" role="menuitem">Sign out</a>
-                                </li>
-                            </ul>
-                            <script type="text/javascript" src=".././script/dropdown.js"></script>
-                        </div>
                     </div>
                 </div>
+                <div class="z-50 hidden my-4 text-base list-none divide-y rounded shadow bg-gray-700 divide-gray-600" id="dropdown-user">
+                    <div class="px-4 py-3" role="none">
+                        <p class="text-sm text-white" role="none">
+                            <?php echo $user_name; // Display the user's name 
+                            ?>
+                        </p>
+                        <p class="text-sm font-medium truncate text-gray-300" role="none">
+                            <?php echo $user_email; // Display the user's email 
+                            ?>
+                        </p>
+                    </div>
+                    <ul class="py-1" role="none">
+                        <li>
+                            <a href="./st_profile.php" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white" role="menuitem">Profile</a>
+                        </li>
+                        <li>
+                            <a href=".././logout.php" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white" role="menuitem">Sign out</a>
+                        </li>
+                    </ul>
+                    <script type="text/javascript" src=".././script/dropdown.js"></script>
+                </div>
             </div>
+        </div>
+        </div>
         </div>
     </nav>
 

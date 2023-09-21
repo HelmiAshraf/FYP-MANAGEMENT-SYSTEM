@@ -2,11 +2,6 @@
 
 include 'includes/sv_sidebar.php';
 
-?>
-
-<?php
-echo $_SESSION['user_id'];
-
 // Assuming you have established a database connection ($conn) and have the user_id of the logged-in supervisor
 $user_id = $_SESSION['user_id']; // Replace with your authentication mechanism
 

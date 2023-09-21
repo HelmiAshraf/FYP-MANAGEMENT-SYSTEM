@@ -1,93 +1,162 @@
 <?php
-session_start();
-
-// Check if the user is logged in; if not, redirect to the login page
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit();
-}
 include 'includes/sv_sidebar.php';
 
-$user_id = 2015900028; // You can change this based on how you store the user ID in your session
+// Define your database credentials
+$db_host = 'localhost';  // Your database host
+$db_name = 'fypms'; // Your database name
+$db_user = 'root'; // Your database username
+$db_pass = ''; // Your database password
 
-$sql = "SELECT
-    sv_id,
-    sv_name,
-    sv_email,
-    sv_expertise,
-    TO_BASE64(sv_image) AS sv_image_base64,
-    sv_phnum
-FROM
-    supervisor
-WHERE
-    sv_id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $user_id); // Assuming user_id is an integer
-$stmt->execute();
-$result = $stmt->get_result();
+try {
+    // Create a PDO database connection
+    $pdo = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
+    // Set PDO to throw exceptions on error
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-if ($result->num_rows > 0) {
-    // Fetch and display the supervisor data
-    while ($row = $result->fetch_assoc()) {
-?>
+    // Handle form submission
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Extract task details from the form
+        $task_title = $_POST["task_title"];
+        $task_description = $_POST["task_description"];
+        $task_date = $_POST["task_date"];
+        $task_sv_id = $_SESSION["user_id"]; // You should have a session variable for supervisor_id
+        $uploader_id = $_SESSION["user_id"]; // Assuming you have a session variable for user_id
 
-        <h1 class="text-4xl font-bold mb-4"> My Profile</h1>
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <div class="px-3 py-2 bg-gray-900 flex justify-between">
-                <div class="relative flex items-center justify-center">
-                    <h2 class="text-2xl font-bold text-gray-900 whitespace-nowrap text-white">My Details</h2>
-                </div>
-                <div class="flex items-center justify-center">
-                    <button type="submit" name="reject" value="reject" class="text-white font-medium rounded-lg text-sm px-3.5 py-1.5  bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">Edit
-                        Profile</button>
-                </div>
-            </div>
+        // Upload files to the database
+        foreach ($_FILES["files"]["tmp_name"] as $key => $tmp_name) {
+            $file_name = $_FILES["files"]["name"][$key];
+            $file_data = file_get_contents($tmp_name); // Get file content as binary data
 
-            <div>
-                <table class="table-fixed w-full text-sm text-left text-gray-400">
-                    <tbody>
-                        <tr class='bg-gray-800 dark:border-gray-700'>
-                            <td scope='row' rowspan="4" class=' text-center w-1/4 px-2 py-3  '>
-                                <img class='mx-auto w-16 md:w-32 lg:w-48' src='data:image/jpeg;base64,<?php echo $row["sv_image_base64"]; ?>' alt='Supervisor Image' />
-                            </td>
-                            <td class='px-6 py-2'>
-                                <p class="font-bold text-white">Name</p><?php echo $row['sv_name']; ?>
-                            </td>
-                            <td class='px-6 py-2'>
-                                <p class="font-bold text-white">Email</p><?php echo $row['sv_email']; ?>
-                            </td>
-                        </tr>
-                        <tr class='bg-white dark:bg-gray-800 dark:border-gray-700'>
-                            <td class='px-6 py-2'>
-                                <p class="font-bold text-white">Supervisor ID</p><?php echo $row['sv_id']; ?>
-                            </td>
-                            <td class='px-6 py-2'>
-                                <p class="font-bold text-white">Phone Number</p><?php echo $row['sv_phnum']; ?>
-                            </td>
-                        </tr>
-                        <tr class='bg-white  dark:bg-gray-800 dark:border-gray-700 '>
-                            <td rowspan="1" colspan="2" class='px-6 py-2' style='vertical-align: top;'>
-                                <p class="font-bold text-white">Expertise</p> <?php echo $row['sv_expertise']; ?>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-<?php
+            // Insert file data into the file table
+            $sql = "INSERT INTO file (file_name, file_content, task_id, uploader_id)
+                    VALUES (?, ?, LAST_INSERT_ID(), ?)";
+
+            // Use prepared statements to insert binary data
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(1, $file_name);
+            $stmt->bindParam(2, $file_data, PDO::PARAM_LOB);
+            $stmt->bindParam(3, $uploader_id, PDO::PARAM_INT);
+            $stmt->execute();
+        }
+
+        // Insert task details into the task table
+        $sql = "INSERT INTO task (task_title, task_description, task_date, task_sv_id)
+                VALUES (?, ?, ?, ?)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(1, $task_title);
+        $stmt->bindParam(2, $task_description);
+        $stmt->bindParam(3, $task_date);
+        $stmt->bindParam(4, $task_sv_id);
+        $stmt->execute();
+
+        // Redirect or show a success message
     }
-} else {
-    echo "No supervisor found for the given user ID.";
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
+    die();
 }
-
-$stmt->close();
-$conn->close();
 ?>
+
+
+
+<?php
+echo $_SESSION['user_id'];
+?>
+<form action="sv_task.php" method="post" enctype="multipart/form-data">
+    <label for="task_title">Task Title:</label>
+    <input type="text" name="task_title" required><br>
+
+    <label for="task_description">Task Description:</label>
+    <textarea name="task_description" required></textarea><br>
+
+    <label for="task_date">Task Date:</label>
+    <input type="date" name="task_date" required><br>
+
+    <label for="files">Upload Files:</label>
+    <input type="file" name="files[]" id="fileInput" multiple onchange="displaySelectedFiles(this.files)"><br>
+
+    <!-- Display selected files -->
+    <div id="selected-files"></div>
+
+    <input type="submit" value="Create Task">
+</form>
+
+<script>
+    function displaySelectedFiles(files) {
+        var displayDiv = document.getElementById("selected-files");
+
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            var fileName = file.name;
+            var fileSize = (file.size / 1024).toFixed(2) + " KB"; // Display file size in KB
+
+            var fileInfo = document.createElement("p");
+            fileInfo.textContent = "Selected File " + (i + 1) + ": " + fileName + " (" + fileSize + ")";
+            displayDiv.appendChild(fileInfo);
+        }
+    }
+</script>
+
+
+
+
+
 
 <!-- content end -->
 </div>
 </div>
 </div>
 </body>
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg p-4 bg-gray-800 text-gray-400">
+            <ul class="flex text-sm">
+                <li class="mr-2">
+                    <p class="text-base font-semibold text-white">
+                        Task Title :
+                    </p>
+                </li>
+                <li>
+                    <p class=" mb-3 text-base text-gray-200">
+                        <?php echo $row['project_title']; ?>
+                    </p>
+                </li>
+            </ul>
+            <ul class="text-sm">
+                <li class="mr-2">
+                    <p class="text-base font-semibold text-white">
+                        Task Description :
+                    </p>
+                </li>
+                <li>
+                    <p class=" mb-3 text-base text-gray-200">
+                        <?php echo $row['project_description']; ?>
+                    </p>
+                </li>
+            </ul>
+            <ul class="text-sm">
+                <li class="mr-2">
+                    <p class="text-base font-semibold text-white">
+                        Task File :
+                    </p>
+                </li>
+                <li>
+                    <p class=" mb-3 text-base text-gray-200">
+                        <?php echo $row['project_description']; ?>
+                    </p>
+                </li>
+            </ul>
+        </div>
+
+<?php
+    }
+} else {
+    // Handle the case where no projects are found for the student
+    echo "No projects found for this student.";
+}
+
+// Close the statement and database connection
+$stmt->close();
+$conn->close();
+?>
+
 
 </html

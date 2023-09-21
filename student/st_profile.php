@@ -1,11 +1,5 @@
 <?php
-session_start();
 
-// Check if the user is logged in; if not, redirect to the login page
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit();
-}
 include 'includes/st_sidebar.php';
 
 $user_id = $_SESSION['user_id']; // Assuming you have stored the logged-in user's ID in a session variable
@@ -58,7 +52,7 @@ if ($result) {
             <div>
                 <table class="table-fixed w-full text-sm text-left text-gray-400">
                     <tbody>
-                        <tr class='bg-gray-800 dark:border-gray-700'>
+                        <tr class='bg-gray-800 border-gray-700'>
                             <td scope='row' rowspan="4" class=' text-center w-1/4 px-2 py-3  '>
                                 <img class='mx-auto w-16 md:w-32 lg:w-48' src='data:image/jpeg;base64,<?php echo $row["student_image"]; ?>' alt='Student Image' />
                             </td>
@@ -69,7 +63,7 @@ if ($result) {
                                 <p class="font-bold text-white">Email</p><?php echo $row['student_email']; ?>
                             </td>
                         </tr>
-                        <tr class='bg-white dark:bg-gray-800 dark:border-gray-700'>
+                        <tr class='bg-gray-800 border-gray-700'>
                             <td class='px-6 py-2'>
                                 <p class="font-bold text-white">Student ID</p><?php echo $row['student_id']; ?>
                             </td>
@@ -77,7 +71,7 @@ if ($result) {
                                 <p class="font-bold text-white">Phone Number</p><?php echo $row['student_phnum']; ?>
                             </td>
                         </tr>
-                        <tr class='bg-white  dark:bg-gray-800 dark:border-gray-700 '>
+                        <tr class='bg-gray-800 border-gray-700 '>
                             <td colpan="2" class='px-6 py-2' style='vertical-align: top;'>
                                 <p class="font-bold text-white">Supervisor Name</p><?php echo $row['supervisor_name']; ?>
                             </td>
@@ -85,7 +79,7 @@ if ($result) {
                                 <p class="font-bold text-white">Group</p> <?php echo $row['student_class']; ?>
                             </td>
                         </tr>
-                        <tr class='bg-white dark:bg-gray-800 dark:border-gray-700 '>
+                        <tr class='bg-gray-800 border-gray-700 '>
                             <td class='px-6 py-2'>
                             </td>
                         </tr>
@@ -101,8 +95,8 @@ if ($result) {
                 </div>
             </div>
             <div>
-                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <table class="w-full text-sm text-left text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-700 text-gray-400">
                         <tr>
                             <th scope="col" class="w-1/4 px-6 py-3">
                                 maters
@@ -113,21 +107,21 @@ if ($result) {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class='bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'>
-                            <td scope='row' class='w-1/4 px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white'>Project Title</td>
+                        <tr class=' border-b bg-gray-800 border-gray-700 hover:bg-gray-600'>
+                            <td scope='row' class='w-1/4 px-6 py-4 font-medium whitespace-nowrap text-white'>Project Title</td>
                             <td class='w-3/4 px-6 py-4'><?php echo $row['project_title']; ?></td>
                         </tr>
                         </tr>
-                        <tr class='bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'>
-                            <td scope='row' class='px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white'>Objective</td>
+                        <tr class=' border-b bg-gray-800 border-gray-700 hover:bg-gray-600'>
+                            <td scope='row' class='px-6 py-4 font-medium whitespace-nowrap text-white'>Objective</td>
                             <td class='px-6 py-4'><?php echo $row['project_objective']; ?></td>
                         </tr>
-                        <tr class='bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'>
-                            <td scope='row' class='px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white'>Scope</td>
+                        <tr class=' border-b bg-gray-800 border-gray-700 hover:bg-gray-600'>
+                            <td scope='row' class='px-6 py-4 font-medium whitespace-nowrap text-white'>Scope</td>
                             <td class='px-6 py-4'><?php echo $row['project_scope']; ?></td>
                         </tr>
-                        <tr class='bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'>
-                            <td scope='row' class='px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white'>Significant</td>
+                        <tr class=' border-b bg-gray-800 border-gray-700 hover:bg-gray-600'>
+                            <td scope='row' class='px-6 py-4 font-medium whitespace-nowrap text-white'>Significant</td>
                             <td class='px-6 py-4'><?php echo $row['project_significant']; ?></td>
                         </tr>
                     </tbody>

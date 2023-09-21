@@ -46,7 +46,7 @@ if ($result->num_rows > 0) {
             <div>
                 <table class="table-fixed w-full text-sm text-left text-gray-400">
                     <tbody class="">
-                        <tr class='bg-gray-800 dark:border-gray-700'>
+                        <tr class='bg-gray-800 :border-gray-700'>
                             <td scope='row' rowspan="4" class=' text-center w-1/4 px-2 py-3  '>
                                 <img class='mx-auto w-16 md:w-32 lg:w-48' src='data:image/jpeg;base64,<?php echo $row["sv_image_base64"]; ?>' alt='Supervisor Image' />
                             </td>
@@ -57,7 +57,7 @@ if ($result->num_rows > 0) {
                                 <p class="font-bold text-white">Email</p><?php echo $row['sv_email']; ?>
                             </td>
                         </tr>
-                        <tr class='bg-white dark:bg-gray-800 dark:border-gray-700'>
+                        <tr class='bg-gray-800 border-gray-700'>
                             <td class='px-6 py-2'>
                                 <p class="font-bold text-white">Supervisor ID</p><?php echo $row['sv_id']; ?>
                             </td>
@@ -65,7 +65,7 @@ if ($result->num_rows > 0) {
                                 <p class="font-bold text-white">Phone Number</p><?php echo $row['sv_phnum']; ?>
                             </td>
                         </tr>
-                        <tr class='bg-white  dark:bg-gray-800 dark:border-gray-700 '>
+                        <tr class=' bg-gray-800  border-gray-700 '>
                             <td rowspan="1" colspan="2" class='px-6 py-2' style='vertical-align: top;'>
                                 <p class="font-bold text-white">Expertise</p> <?php echo $row['sv_expertise']; ?>
                             </td>
