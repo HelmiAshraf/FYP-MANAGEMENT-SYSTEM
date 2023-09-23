@@ -1,15 +1,14 @@
 <?php
-// Check if 'student_id' is set in the session (assuming you have a session variable for student_id)
-if (isset($_SESSION['student_id'])) {
-    // Get the student_id from the session
-    $student_id = $_SESSION['student_id'];
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["tag"])) {
+    $tag = $_POST["tag"];
+
+    if ($tag == 6) {
         // Define your database credentials
-        $db_host = 'localhost';
-        $db_name = 'fypms';
-        $db_user = 'root';
-        $db_pass = '';
+        $db_host = 'localhost';  // Your database host
+        $db_name = 'fypms'; // Your database name
+        $db_user = 'root'; // Your database username
+        $db_pass = ''; // Your database password
 
         try {
             // Create a PDO database connection
@@ -17,8 +16,10 @@ if (isset($_SESSION['student_id'])) {
             // Set PDO to throw exceptions on error
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            // Get task_id from the form (assuming it's named 'task_id' in the form)
+            // Extract data from the form
             $task_id = $_POST['task_id'];
+            $student_id = $_POST["user_id"];
+            $submission_date = date("Y-m-d");
 
             // Retrieve supervisor_id associated with the student from the 'supervise' table
             $sql_supervisor = "SELECT supervisor_id FROM supervise WHERE student_id = ?";
@@ -30,39 +31,43 @@ if (isset($_SESSION['student_id'])) {
 
             if ($row_supervisor) {
                 $supervisor_id = $row_supervisor['supervisor_id'];
-                $submission_date = date("Y-m-d");
 
-                // Insert submission details into the 'task_submission' table
+                // Insert data into the 'task_submission' table
                 $sql_submission = "INSERT INTO task_submission (task_id, student_id, supervisor_id, submissiondate)
-                                   VALUES (?, ?, ?, ?)";
+                                VALUES (?, ?, ?, ?)";
                 $stmt_submission = $pdo->prepare($sql_submission);
                 $stmt_submission->bindParam(1, $task_id);
                 $stmt_submission->bindParam(2, $student_id);
                 $stmt_submission->bindParam(3, $supervisor_id);
                 $stmt_submission->bindParam(4, $submission_date);
-                $stmt_submission->execute();
 
-                // Handle file uploads
-                if (!empty($_FILES['files']['name'])) {
-                    // Iterate through uploaded files
-                    foreach ($_FILES['files']['name'] as $key => $file_name) {
-                        $tmp_name = $_FILES['files']['tmp_name'][$key];
-                        $file_content = file_get_contents($tmp_name);
+                if ($stmt_submission->execute()) {
+                    // Upload files to the database
+                    foreach ($_FILES["files"]["tmp_name"] as $key => $tmp_name) {
+                        $file_name = $_FILES["files"]["name"][$key];
+                        $file_data = file_get_contents($tmp_name); // Get file content as binary data
 
                         // Insert file data into the 'file' table
-                        $sql_file = "INSERT INTO file (file_name, file_content, task_id, uploader_id)
-                                     VALUES (?, ?, ?, ?)";
-                        $stmt_file = $pdo->prepare($sql_file);
-                        $stmt_file->bindParam(1, $file_name);
-                        $stmt_file->bindParam(2, $file_content, PDO::PARAM_LOB);
-                        $stmt_file->bindParam(3, $task_id, PDO::PARAM_INT);
-                        $stmt_file->bindParam(4, $student_id, PDO::PARAM_INT);
-                        $stmt_file->execute();
-                    }
-                }
+                        $sql = "INSERT INTO file (file_name, file_content, task_id, uploader_id)
+                                VALUES (?, ?, ?, ?)";
 
-                // Redirect or show a success message
-                echo "Task submitted successfully.";
+                        $stmt = $pdo->prepare($sql);
+                        $stmt->bindParam(1, $file_name);
+                        $stmt->bindParam(2, $file_data, PDO::PARAM_LOB);
+                        $stmt->bindParam(3, $task_id);
+                        $stmt->bindParam(4, $student_id);
+
+                        if (!$stmt->execute()) {
+                            echo "Error inserting file: " . $stmt->errorInfo()[2]; // Display SQL error message
+                        }
+                    }
+
+                    // Redirect to st_task_details.php with a success message and task_id
+                    header("Location: ../st_task_details.php?task_id=" . $task_id);
+                    exit;
+                } else {
+                    echo "Error inserting task submission: " . $stmt_submission->errorInfo()[2]; // Display SQL error message
+                }
             } else {
                 echo "Supervisor not found for this student.";
             }

@@ -112,24 +112,26 @@ if (isset($_GET['task_id'])) {
 }
 ?>
 
-
-
-
 <h1 class="text-2xl font-bold mb-4 mt-4">Submit Task</h1>
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
     <div class="p-4 bg-gray-800">
         <form action="function/submit_task.php" method="POST" enctype="multipart/form-data">
             <!-- Add an input field for task_id -->
             <input type="hidden" name="task_id" value="<?php echo $_GET['task_id']; ?>">
+            <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
             <div class="mb-6">
                 <label for="files" class="block mb-2 text-sm font-medium text-white">Upload Files</label>
                 <input type="file" name="files[]" id="fileInput" multiple onchange="displaySelectedFiles(this.files)" class="block w-full text-sm border rounded-lg cursor-pointer text-gray-400 focus:outline-none bg-gray-700 border-gray-600 placeholder-gray-400" aria-describedby="user_avatar_help">
                 <!-- Display selected files -->
                 <div id="selected-files"></div>
             </div>
-            <input type="submit" class="text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center bg-blue-600 hover-bg-blue-700 focus-ring-blue-800" value="Submit Task">
+            <!-- Add an input field for tag -->
+            <input type="hidden" name="tag" value="6">
+            <div>
+                <!-- Use a button for form submission -->
+                <button type="submit" class="text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus-ring-blue-800">Submit Task</button>
+            </div>
         </form>
-
 
     </div>
 </div>
@@ -148,3 +150,89 @@ if (isset($_GET['task_id'])) {
         }
     }
 </script>
+
+
+<?php
+
+
+
+
+// $student_id = $_SESSION['user_id'];
+
+// if (isset($_REQUEST["tag"])) {
+// $tag = $_REQUEST["tag"];
+// if ($tag == 10) {
+// if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// // Define your database credentials
+// $db_host = 'localhost';
+// $db_name = 'fypms';
+// $db_user = 'root';
+// $db_pass = '';
+
+// try {
+// // Create a PDO database connection
+// $pdo = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
+// // Set PDO to throw exceptions on error
+// $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+// // Get task_id from the form (assuming it's named 'task_id' in the form)
+// $task_id = $_POST['task_id'];
+
+// // Retrieve supervisor_id associated with the student from the 'supervise' table
+// $sql_supervisor = "SELECT supervisor_id FROM supervise WHERE student_id = ?";
+// $stmt_supervisor = $pdo->prepare($sql_supervisor);
+// $stmt_supervisor->bindParam(1, $student_id);
+// $stmt_supervisor->execute();
+
+// $row_supervisor = $stmt_supervisor->fetch(PDO::FETCH_ASSOC);
+
+// if ($row_supervisor) {
+// $supervisor_id = $row_supervisor['supervisor_id'];
+// $submission_date = date("Y-m-d");
+
+// // Insert submission details into the 'task_submission' table
+// $sql_submission = "INSERT INTO task_submission (task_id, student_id, supervisor_id, submissiondate)
+// VALUES (?, ?, ?, ?)";
+// $stmt_submission = $pdo->prepare($sql_submission);
+// $stmt_submission->bindParam(1, $task_id);
+// $stmt_submission->bindParam(2, $student_id);
+// $stmt_submission->bindParam(3, $supervisor_id);
+// $stmt_submission->bindParam(4, $submission_date);
+// $stmt_submission->execute();
+
+// // Handle file uploads
+// if (!empty($_FILES['files']['name'])) {
+// // Iterate through uploaded files
+// foreach ($_FILES['files']['name'] as $key => $file_name) {
+// $tmp_name = $_FILES['files']['tmp_name'][$key];
+// $file_content = file_get_contents($tmp_name);
+
+// // Insert file data into the 'file' table
+// $sql_file = "INSERT INTO file (file_name, file_content, task_id, uploader_id)
+// VALUES (?, ?, ?, ?)";
+// $stmt_file = $pdo->prepare($sql_file);
+// $stmt_file->bindParam(1, $file_name);
+// $stmt_file->bindParam(2, $file_content, PDO::PARAM_LOB);
+// $stmt_file->bindParam(3, $task_id, PDO::PARAM_INT);
+// $stmt_file->bindParam(4, $student_id, PDO::PARAM_INT);
+// $stmt_file->execute();
+// }
+// }
+
+// // Redirect or show a success message
+// echo "Task submitted successfully.";
+// } else {
+// echo "Supervisor not found for this student.";
+// }
+// } catch (PDOException $e) {
+// echo "Error: " . $e->getMessage();
+// die();
+// }
+// }
+// }
+// }
+
+
+
+
+?>
