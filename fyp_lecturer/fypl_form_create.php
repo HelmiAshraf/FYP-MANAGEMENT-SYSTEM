@@ -2,65 +2,56 @@
 include 'includes/sidebar.php';
 
 // Define your database credentials
-$db_host = 'localhost';  // Your database host
-$db_name = 'fypms'; // Your database name
-$db_user = 'root'; // Your database username
-$db_pass = ''; // Your database password
+$db_host = 'localhost';
+$db_name = 'fypms';
+$db_user = 'root';
+$db_pass = '';
 
-$successMessage = ''; // Initialize an empty success message
+$successMessage = '';
 
 try {
     // Create a PDO database connection
     $pdo = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
-    // Set PDO to throw exceptions on error
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Handle form submission
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Extract task details from the form
-        $task_title = $_POST["task_title"];
-        $task_description = $_POST["task_description"];
-        // Generate the date in Y-m-d format
-        $date_create = date("Y-m-d");
-        $task_sv_id = $_SESSION["user_id"]; // You should have a session variable for supervisor_id
-        $uploader_id = $_SESSION["user_id"]; // Assuming you have a session variable for user_id
-        $task_part = $_POST["task_part"]; // Get the selected task part
+        // Extract form details from the POST data
+        $form_title = $_POST["Form_title"];
+        $task_part = $_POST["task_part"];
+        $uploader_id = $_SESSION["user_id"];
+        $form_date_create = date("Y-m-d");
+        $form_date_due =$_POST["form_date_due"]; // Set your due date here, if applicable
 
-        // Insert task details into the task table
-        $sql = "INSERT INTO task (task_title, task_description, date_create, task_sv_id, task_part)
-                VALUES (?, ?, ?, ?, ?)";
+        // Insert form details into the form table
+        $sql = "INSERT INTO form (Form_title, form_date_create, form_date_due, form_part)
+                VALUES (?, ?, ?, ?)";
         $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(1, $task_title);
-        $stmt->bindParam(2, $task_description);
-        $stmt->bindParam(3, $date_create);
-        $stmt->bindParam(4, $task_sv_id);
-        $stmt->bindParam(5, $task_part);
+        $stmt->bindParam(1, $form_title);
+        $stmt->bindParam(2, $form_date_create);
+        $stmt->bindParam(3, $form_date_due);
+        $stmt->bindParam(4, $task_part);
         $stmt->execute();
 
-        // Get the task_id that was just inserted
-        $task_id = $pdo->lastInsertId();
+        // Get the form_id that was just inserted
+        $form_id = $pdo->lastInsertId();
 
-        // Upload files to the database
+        // Handle file uploads
         foreach ($_FILES["files"]["tmp_name"] as $key => $tmp_name) {
             $file_name = $_FILES["files"]["name"][$key];
-            $file_data = file_get_contents($tmp_name); // Get file content as binary data
+            $file_data = file_get_contents($tmp_name);
 
-            // Insert file data into the file table
-            $sql = "INSERT INTO file (file_name, file_content, task_id, uploader_id)
+            // Insert file data into the file_form table
+            $sql = "INSERT INTO file_form (file_name, file_content, form_id, uploader_id)
                     VALUES (?, ?, ?, ?)";
-
-            // Use prepared statements to insert binary data
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(1, $file_name);
             $stmt->bindParam(2, $file_data, PDO::PARAM_LOB);
-            $stmt->bindParam(3, $task_id, PDO::PARAM_INT);
+            $stmt->bindParam(3, $form_id, PDO::PARAM_INT);
             $stmt->bindParam(4, $uploader_id, PDO::PARAM_INT);
             $stmt->execute();
         }
 
-  
-            
-        
+        $successMessage = 'Form submitted successfully.';
     }
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
@@ -68,17 +59,20 @@ try {
 }
 ?>
 
-<h1 class="text-2xl font-bold mb-4">Upload Form</h1>
+<!-- Your HTML form -->
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <?php
+    echo $_SESSION["user_id"];
+    ?>
     <div class="p-4 bg-gray-800">
-        <form action="sv_task_create.php" method="POST" enctype="multipart/form-data">
+        <form action="fypl_form_create.php" method="POST" enctype="multipart/form-data">
             <div class="mb-6">
-                <label for="title" class="block mb-2 text-sm font-medium text-white">Task Title</label>
-                <input type="text" required name="task_title" class=" border text-sm rounded-lg block w-full p-2.5 bg-gray-700 dborder-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Your final year project title" required>
+                <label for="title" class="block mb-2 text-sm font-medium text-white">Form Title</label>
+                <input type="text" required name="Form_title" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Your final year project title" required>
             </div>
             <div class="mb-6">
-                <label for="message" class="block mb-2 text-sm font-medium text-white">Task Description</label>
-                <textarea name="task_description" rows="4" class="block p-2.5 w-full text-sm rounded-lg border bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Write some project description"></textarea>
+                <label for="form_date_due" class="block mb-2 text-sm font-medium text-white">Due Date</label>
+                <input type="date" required name="form_date_due" class="border text-sm rounded-lg block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
             </div>
             <div class="mb-6">
                 <label for="files" class="block mb-2 text-sm font-medium text-white">Upload Files</label>
@@ -93,19 +87,27 @@ try {
                     <option value="6">Part 6</option>
                 </select>
             </div>
-            <input type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark-bg-blue-600 dark:hover-bg-blue-700 dark:focus-ring-blue-800" value="Create Task">
+            <input type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark-bg-blue-600 dark:hover-bg-blue-700 dark:focus-ring-blue-800" value="Upload Task">
+        </form>
+
+
+        <!-- Display success message if needed -->
+        <?php if (!empty($successMessage)) : ?>
+            <div class="text-green-500"><?php echo $successMessage; ?></div>
+        <?php endif; ?>
         </form>
     </div>
 </div>
 
 <script>
+    // JavaScript function to display selected files (same as before)
     function displaySelectedFiles(files) {
         var displayDiv = document.getElementById("selected-files");
 
         for (var i = 0; i < files.length; i++) {
             var file = files[i];
             var fileName = file.name;
-            var fileSize = (file.size / 1024).toFixed(2) + " KB"; // Display file size in KB
+            var fileSize = (file.size / 1024).toFixed(2) + " KB";
 
             var fileInfo = document.createElement("p");
             fileInfo.textContent = "Selected File " + (i + 1) + ": " + fileName + " (" + fileSize + ")";

@@ -1,24 +1,22 @@
 <?php
 include 'includes/sidebar.php';
 
-
 $user_id = $_SESSION["user_id"]; // Assuming you have stored the logged-in user's ID in a session variable
 
+// Corrected SQL query to fetch form details
 $sql = "SELECT
-sv_id,
-sv_name AS supervisor_name,
-sv_expertise AS supervisor_expertise,
-sv_quota AS supervisor_quota
+    form_id,
+    Form_title,
+    form_date_create,
+    form_date_due
 FROM
-supervisor;
-";
+    form;"; // Adjust this query to fetch forms associated with the user
 
 $result = mysqli_query($conn, $sql);
 ?>
 
 <h1 class="text-4xl font-bold mb-4">Form</h1>
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-
     <div class="p-4 bg-white dark:bg-gray-900 flex justify-between">
         <!-- Left side with search input -->
         <div class="relative">
@@ -40,27 +38,27 @@ $result = mysqli_query($conn, $sql);
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
                 <th scope="col" class="px-6 py-3">
-                    form name
+                    Form Name
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    date create
+                    Date Created
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    due date
+                    Due Date
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    action
+                    Action
                 </th>
             </tr>
         </thead>
         <tbody>
             <?php while ($row = mysqli_fetch_assoc($result)) { ?>
                 <tr class='bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'>
-                    <td scope='row' class='px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white'><?php echo $row['supervisor_name']; ?></td>
-                    <td class='px-6 py-4'><?php echo $row['supervisor_expertise']; ?></td>
-                    <td class='px-6 py-4'><?php echo $row['supervisor_expertise']; ?></td>
+                    <td scope='row' class='px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white'><?php echo $row['Form_title']; ?></td>
+                    <td class='px-6 py-4'><?php echo $row['form_date_create']; ?></td>
+                    <td class='px-6 py-4'><?php echo $row['form_date_due']; ?></td>
                     <td class='px-6 py-4'>
-                        <a href='fypl_lecturer_details.php?sv_id=<?php echo $row["sv_id"]; ?>' class='font-medium text-blue-600 dark:text-blue-500 hover:underline'>View</a>
+                        <a href='fypl_form_details.php?form_id=<?php echo $row["form_id"]; ?>' class='font-medium text-blue-600 dark:text-blue-500 hover:underline'>View</a>
                     </td>
                 </tr>
             <?php } ?>
@@ -74,6 +72,7 @@ $result = mysqli_query($conn, $sql);
 <?php
 mysqli_close($conn);
 ?>
+
 
 
 
