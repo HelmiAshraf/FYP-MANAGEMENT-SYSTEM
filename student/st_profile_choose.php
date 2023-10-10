@@ -44,7 +44,7 @@ if ($result) {
 ?>
 
         <h1 class="text-4xl font-bold mb-4"> My Profile</h1>
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg -lg">
 
             <div class="px-3 py-2 bg-gray-900 flex justify-between">
                 <div class="relative  flex items-center justify-center">
@@ -78,12 +78,12 @@ if ($result) {
                             </td>
                         </tr>
                         <tr class='bg-white  dark:bg-gray-800 dark:border-gray-700 '>
-                            
+
                             <td rowspan="1" colspan="2" class='px-6 py-2' style='vertical-align: top;'>
                                 <p class="font-bold text-white">Group</p> <?php echo $row['student_class']; ?>
                             </td>
                         </tr>
-                        
+
                     </tbody>
                 </table>
             </div>

@@ -26,7 +26,7 @@ if ($stmt->execute()) {
 
 ?>
     <h1 class="text-2xl font-bold mb-4">Propose Project</h1>
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg -lg">
         <div class="p-4 bg-gray-900">
             <label for="table-search" class="sr-only">Search</label>
             <div class="relative mt-1">
@@ -68,7 +68,7 @@ if ($stmt->execute()) {
                         <td class='px-6 py-4'><?php echo $row['project_title']; ?></td>
                         <td class='px-6 py-4'><?php echo $row['project_submit_date']; ?></td>
                         <td class='px-6 py-4'>
-                            <a href='sv_student_acceptance.php?st_id=<?php echo $row["st_id"];?>' class='font-medium text-blue-500 hover:underline'>View</a>
+                            <a href='sv_student_acceptance.php?st_id=<?php echo $row["st_id"]; ?>' class='font-medium text-blue-500 hover:underline'>View</a>
                         </td>
                     </tr>
                 <?php } ?>

@@ -12,7 +12,7 @@ include 'includes/st_sidebar_choose_sv.php';
 
 <h1 class="text-2xl font-bold mb-4">Choose Supervisor</h1>
 <?php echo $_SESSION['user_id']; ?>
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg -lg">
     <div class="p-4 bg-gray-900">
         <label for="table-search" class="sr-only">Search</label>
         <div class="relative mt-1">

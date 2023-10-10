@@ -53,12 +53,12 @@ include '../db.php';
                             </p>
                         </div>
                         <div class="ml-4">
-                            <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
+                            <button type="button" class="flex text-sm bg-gray-800 rounded-lg -full focus:ring-4 focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
                                 <span class="sr-only">Open user menu</span>
-                                <img class="w-8 h-8 rounded-full" src="data:image/jpeg;base64,<?php echo $sidebar_fl_image_base64; ?>" alt="User Photo">
+                                <img class="w-8 h-8 rounded-lg -full" src="data:image/jpeg;base64,<?php echo $sidebar_fl_image_base64; ?>" alt="User Photo">
                             </button>
                         </div>
-                        <div class="z-50 hidden my-4 text-base list-none divide-y rounded shadow bg-gray-700 divide-gray-600" id="dropdown-user">
+                        <div class="z-50 hidden my-4 text-base list-none divide-y rounded-lg  shadow bg-gray-700 divide-gray-600" id="dropdown-user">
                             <div class="px-4 py-3" role="none">
                                 <p class="text-sm text-white" role="none">
                                     <?php echo $sidebar_user_name; // Display the user's name 

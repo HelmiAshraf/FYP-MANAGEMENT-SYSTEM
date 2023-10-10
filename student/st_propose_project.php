@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <h1 class="text-2xl font-bold mb-4">Propose Project</h1>
 <?php echo $_SESSION['user_id']; ?>
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg -lg">
     <div class="p-4 bg-white dark:bg-gray-800">
         <form action="st_propose_project.php" method="POST">
             <div class="mb-6">

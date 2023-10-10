@@ -14,7 +14,7 @@
     </div>
 
     <div class="container mx-auto p-3">
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg -lg">
             <table class="w-full text-sm text-left text-gray-500 bg-white border border-gray-300">
                 <thead class="text-xs text-black uppercase bg-gray-300">
                     <tr class="">
@@ -61,7 +61,7 @@
                             echo "<td class='py-2 px-4 border border-gray-300'>" . $row["supervisor_faculty"] . "</td>";
                             echo "<td class='py-2 px-4 border border-gray-300'>" . $row["supervisor_expertise"] . "</td>";
                             echo "<td class='py-2 px-4 border border-gray-300'>
-                        <button class='bg-[#114c61] text-white px-2 py-1 rounded-md hover:bg-[#147497] focus:outline-none'
+                        <button class='bg-[#114c61] text-white px-2 py-1 rounded-lg -md hover:bg-[#147497] focus:outline-none'
                             onclick='showDescription(\"" . $row["supervisor_description"] . "\")'>
                             Choose
                         </button>
@@ -84,7 +84,7 @@
         <div class="bg-white p-4 rounded-lg shadow-md">
             <h2 class="text-lg font-semibold mb-2">Supervisor Description</h2>
             <p id="descriptionText" class="text-gray-700"></p>
-            <button class="mt-4 bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-700 focus:outline-none" onclick="closeDescription()">Close</button>
+            <button class="mt-4 bg-blue-500 text-white px-2 py-1 rounded-lg -md hover:bg-blue-700 focus:outline-none" onclick="closeDescription()">Close</button>
         </div>
     </div>
 

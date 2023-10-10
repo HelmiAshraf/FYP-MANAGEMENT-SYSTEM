@@ -113,7 +113,7 @@ if (isset($_GET['task_id'])) {
 ?>
 
 <h1 class="text-2xl font-bold mb-4 mt-4">Submit Task</h1>
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg -lg">
     <div class="p-4 bg-gray-800">
         <form action="function/submit_task.php" method="POST" enctype="multipart/form-data">
             <!-- Add an input field for task_id -->

@@ -95,7 +95,7 @@ if ($stmt_students->execute()) {
     $result_students = $stmt_students->get_result();
 ?>
     <h1 class="text-2xl font-bold mb-4 mt-4">Submitted Tasks</h1>
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg -lg">
         <div class="p-4 bg-gray-900">
             <label for="table-search" class="sr-only">Search</label>
             <!-- ... Rest of the search input code ... -->

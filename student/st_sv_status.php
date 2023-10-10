@@ -63,9 +63,9 @@ if ($result->num_rows > 0) {
                 <!-- Chosen Supervisor and Status -->
                 <div class="grid grid-cols-3 gap-4">
                     <!-- Chosen Supervisor Details -->
-                    <div class="border p-6 rounded-md shadow-md col-span-2">
+                    <div class="border p-6 rounded-lg -md shadow-md col-span-2">
                         <div class="flex items-center mb-6">
-                            <img class='h-12 w-12' src='data:image/jpeg;base64,<?php echo $row["sv_image_base64"]; ?>' alt="Supervisor" class="w-32 h-32 rounded-full mr-4">
+                            <img class='h-12 w-12' src='data:image/jpeg;base64,<?php echo $row["sv_image_base64"]; ?>' alt="Supervisor" class="w-32 h-32 rounded-lg -full mr-4">
                             <div>
                                 <div class="ml-4">
                                     <p class="font-semibold text-white text-lg"><?php echo $row['sv_name']; ?></p>
@@ -81,7 +81,7 @@ if ($result->num_rows > 0) {
                     </div>
 
                     <!-- Status of Application -->
-                    <div class="border p-6 rounded-md shadow-md">
+                    <div class="border p-6 rounded-lg -md shadow-md">
                         <p class="font-semibold text-white text-lg">Application Status</p>
                         <p class="text-green-500 font-semibold"><?php echo $projectStatusLabel; ?></p>
                     </div>
@@ -99,7 +99,7 @@ if ($result->num_rows > 0) {
 
                 <!-- Change Supervisor and Confirm Supervisor Buttons -->
                 <div class="flex justify-end space-x-4 mt-4 mb-14">
-                    <a href="st_proposal.php" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none">
+                    <a href="st_proposal.php" class="bg-blue-500 text-white px-4 py-2 rounded-lg -md hover:bg-blue-600 focus:outline-none">
                         Go To FYP System
                     </a>
                 </div>
@@ -112,8 +112,8 @@ if ($result->num_rows > 0) {
                 <h2 class="text-lg font-semibold mb-2">Confirmation</h2>
                 <p id="confirmationText" class="text-gray-700"></p>
                 <div class="flex justify-end mt-4">
-                    <button id="confirmButton" class="bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-700 focus:outline-none mr-2" onclick="confirmSupervisor()">Confirm</button>
-                    <button class="bg-gray-500 text-white px-2 py-1 rounded-md hover:bg-gray-700 focus:outline-none" onclick="closeConfirmation()">Cancel</button>
+                    <button id="confirmButton" class="bg-blue-500 text-white px-2 py-1 rounded-lg -md hover:bg-blue-700 focus:outline-none mr-2" onclick="confirmSupervisor()">Confirm</button>
+                    <button class="bg-gray-500 text-white px-2 py-1 rounded-lg -md hover:bg-gray-700 focus:outline-none" onclick="closeConfirmation()">Cancel</button>
                 </div>
             </div>
         </div>

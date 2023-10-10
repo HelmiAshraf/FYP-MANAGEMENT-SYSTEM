@@ -20,7 +20,7 @@ try {
         $task_part = $_POST["task_part"];
         $uploader_id = $_SESSION["user_id"];
         $form_date_create = date("Y-m-d");
-        $form_date_due =$_POST["form_date_due"]; // Set your due date here, if applicable
+        $form_date_due = $_POST["form_date_due"]; // Set your due date here, if applicable
 
         // Insert form details into the form table
         $sql = "INSERT INTO form (Form_title, form_date_create, form_date_due, form_part)
@@ -60,7 +60,7 @@ try {
 ?>
 
 <!-- Your HTML form -->
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg -lg">
     <?php
     echo $_SESSION["user_id"];
     ?>

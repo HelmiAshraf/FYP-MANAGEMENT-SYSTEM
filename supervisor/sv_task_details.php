@@ -141,7 +141,7 @@ if ($stmt->execute()) {
     $result = $stmt->get_result();
 ?>
     <h1 class="text-2xl font-bold mb-4 mt-4">Submitted Tasks</h1>
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg -lg">
         <div class="p-4 bg-gray-900">
             <label for="table-search" class="sr-only">Search</label>
             <div class="relative mt-1">
@@ -186,8 +186,8 @@ if ($stmt->execute()) {
 
 $stmt->close();
 $conn->close();
-?>
-</div>
+    ?>
+    </div>
 
 
     <!-- content end -->
