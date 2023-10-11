@@ -39,7 +39,7 @@ include 'includes/st_sidebar.php';
             // Replace 'your_supervisor_id' with the actual supervisor's user_id
             $student_id = $_SESSION['user_id'];
             // Assuming you have a 'tasks' table with columns 'task_id', 'task_name', and 'date_created'
-            $sql = "SELECT t.task_id, t.task_title, t.date_create, t.task_part
+            $sql = "SELECT t.task_id, t.task_title, t.task_date_create, t.task_part
             FROM task t
             JOIN supervise s ON t.task_sv_id = s.supervisor_id
             JOIN student st ON s.student_id = st.st_id
@@ -56,7 +56,7 @@ include 'includes/st_sidebar.php';
                 while ($row = $result->fetch_assoc()) {
                     $task_id = $row['task_id'];
                     $task_name = $row['task_title'];
-                    $date_created = $row['date_create'];
+                    $date_created = $row['task_date_create'];
                     $task_part = $row['task_part'];
             ?>
                     <tr class='border-b bg-gray-800 border-gray-700 hover:bg-gray-900'>

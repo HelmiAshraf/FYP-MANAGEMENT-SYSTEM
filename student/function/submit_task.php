@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["tag"])) {
                         $file_data = file_get_contents($tmp_name); // Get file content as binary data
 
                         // Insert file data into the 'file' table
-                        $sql = "INSERT INTO file (file_name, file_content, task_id, uploader_id)
+                        $sql = "INSERT INTO file (file_name, file_content, type_id, file_uploader_id)
                                 VALUES (?, ?, ?, ?)";
 
                         $stmt = $pdo->prepare($sql);

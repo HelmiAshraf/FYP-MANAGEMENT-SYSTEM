@@ -51,9 +51,9 @@ if (isset($_GET['task_id'])) {
                 </ul>
                 <?php
                 // Now, let's retrieve and display all associated files for this task
-                $sql_files = "SELECT f.file_name, f.uploader_id, f.file_id
+                $sql_files = "SELECT f.file_name, f.file_uploader_id, f.file_id
                           FROM file f
-                          WHERE f.task_id = ?";
+                          WHERE f.type_id = ?";
 
                 $stmt_files = $conn->prepare($sql_files);
                 $stmt_files->bind_param("i", $task_id);
@@ -74,7 +74,7 @@ if (isset($_GET['task_id'])) {
                                     <?php
                                     while ($row_files = $result_files->fetch_assoc()) {
                                         $file_name = $row_files['file_name'];
-                                        $uploader_id = $row_files['uploader_id'];
+                                        $uploader_id = $row_files['file_uploader_id'];
                                         $file_id = $row_files['file_id'];
                                     ?>
                                         <li class="mb-3 text-base text-gray-200">

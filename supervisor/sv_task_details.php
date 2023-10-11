@@ -52,9 +52,9 @@ if (isset($_GET['task_id'])) {
 
                 <?php
                 // Now, let's retrieve and display all associated files for this task
-                $sql_files = "SELECT f.file_name, f.uploader_id
+                $sql_files = "SELECT f.file_name, f.file_uploader_id
                           FROM file f
-                          WHERE f.task_id = ?";
+                          WHERE f.type_id = ?";
 
                 $stmt_files = $conn->prepare($sql_files);
                 $stmt_files->bind_param("i", $task_id);
@@ -140,7 +140,7 @@ $stmt->bind_param("i", $user_id); // Assuming user_id is an integer
 if ($stmt->execute()) {
     $result = $stmt->get_result();
 ?>
-    <h1 class="text-2xl font-bold mb-4 mt-4">Submitted Tasks</h1>
+    <h1 class="text-2xl font-bold mb-4 mt-4">Submited Tasks</h1>
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg -lg">
         <div class="p-4 bg-gray-900">
             <label for="table-search" class="sr-only">Search</label>

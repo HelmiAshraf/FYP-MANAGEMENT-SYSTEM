@@ -27,7 +27,7 @@ try {
         $task_part = $_POST["task_part"]; // Get the selected task part
 
         // Insert task details into the task table
-        $sql = "INSERT INTO task (task_title, task_description, date_create, task_sv_id, task_part)
+        $sql = "INSERT INTO task (task_title, task_description, task_date_create, task_sv_id, task_part)
                 VALUES (?, ?, ?, ?, ?)";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(1, $task_title);
@@ -41,20 +41,22 @@ try {
         $task_id = $pdo->lastInsertId();
 
         // Upload files to the database
+        // Upload files to the database
         foreach ($_FILES["files"]["tmp_name"] as $key => $tmp_name) {
             $file_name = $_FILES["files"]["name"][$key];
             $file_data = file_get_contents($tmp_name); // Get file content as binary data
 
-            // Insert file data into the file table
-            $sql = "INSERT INTO file (file_name, file_content, task_id, uploader_id)
-                    VALUES (?, ?, ?, ?)";
+            // Insert file data into the file table using the retrieved task_id
+            $sql = "INSERT INTO file (file_name, file_content, type_id, file_type, file_uploader_id)
+            VALUES (?, ?, ?, ?, ?)";
 
             // Use prepared statements to insert binary data
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(1, $file_name);
-            $stmt->bindParam(2, $file_data, PDO::PARAM_LOB);
-            $stmt->bindParam(3, $task_id, PDO::PARAM_INT);
-            $stmt->bindParam(4, $uploader_id, PDO::PARAM_INT);
+            $stmt->bindValue(2, $file_data, PDO::PARAM_LOB); // Use bindValue for binary data
+            $stmt->bindParam(3, $task_id, PDO::PARAM_INT); // Use the retrieved task_id as file_type_id
+            $stmt->bindValue(4, 'task', PDO::PARAM_STR); // Set file_type to 'task'
+            $stmt->bindParam(5, $uploader_id, PDO::PARAM_INT);
             $stmt->execute();
         }
     }
@@ -63,6 +65,7 @@ try {
     die();
 }
 ?>
+
 
 <h1 class="text-2xl font-bold mb-4">Create Task</h1>
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg -lg">
