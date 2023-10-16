@@ -116,7 +116,7 @@ $proposal_title = $_GET['proposal_title'];
                                                 $file_type = "proposal submission"; // Assuming the type is 'proposal'
                                                 $file_uploader_id = $student_id; // User's ID
 
-                                                $sql_file = "INSERT INTO file (file_name, file_content, file_type_id, file_type, file_uploader_id) VALUES (?, ?, ?, ?, ?)";
+                                                $sql_file = "INSERT INTO file (file_name, file_content, type_id, file_type, file_uploader_id) VALUES (?, ?, ?, ?, ?)";
                                                 $stmt_file = $conn->prepare($sql_file);
                                                 $stmt_file->bind_param("ssiss", $file_name, $file_content, $file_type_id, $file_type, $file_uploader_id);
 
@@ -182,7 +182,7 @@ $proposal_title = $_GET['proposal_title'];
     INNER JOIN
         proposal_submission ps ON p.proposal_id = ps.proposal_id
     INNER JOIN
-        file f ON ps.proposal_submission_id = f.file_type_id
+        file f ON ps.proposal_submission_id = f.type_id
     INNER JOIN
         student s ON f.file_uploader_id = s.st_id
     WHERE

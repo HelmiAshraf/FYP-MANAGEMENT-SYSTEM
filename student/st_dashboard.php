@@ -79,7 +79,7 @@ $conn->close();
 
 
 
-<h1 class="text-2xl font-bold mb-3">Dashboard</h1>
+<h1 class="text-4xl font-bold mb-3">Dashboard</h1>
 <div class="flex">
     <div class="w-1/2">
         <div class="bg-white rounded-lg shadow-md p-3 border">

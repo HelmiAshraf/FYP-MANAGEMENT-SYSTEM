@@ -242,7 +242,7 @@ $proposal_title = $_GET['proposal_title'];
         INNER JOIN
             proposal_submission ps ON p.proposal_id = ps.proposal_id
         INNER JOIN
-            file f ON ps.proposal_submission_id = f.file_type_id
+            file f ON ps.proposal_submission_id = f.type_id
         INNER JOIN
             student s ON f.file_uploader_id = s.st_id
         WHERE
