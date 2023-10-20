@@ -3,16 +3,6 @@ include 'includes/st_sidebar.php';
 
 $user_id = $_SESSION["user_id"]; // Assuming you have stored the logged-in user's ID in a session variable
 
-// Corrected SQL query to fetch form details
-$sql = "SELECT
-    form_id,
-    Form_title,
-    form_date_create,
-    form_date_due
-FROM
-    form;"; // Adjust this query to fetch forms associated with the user
-
-$result = mysqli_query($conn, $sql);
 ?>
 
 <h1 class="text-4xl font-bold mb-4">Form</h1>
@@ -42,32 +32,58 @@ $result = mysqli_query($conn, $sql);
                 <th scope="col" class="px-6 py-3">
                     Due Date
                 </th>
-                <th scope="col" class="px-6 py-3">
-                    Action
-                </th>
             </tr>
         </thead>
-        <tbody>
-            <?php while ($row = mysqli_fetch_assoc($result)) { ?>
-                <tr class='bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'>
-                    <td scope='row' class='px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white'><?php echo $row['Form_title']; ?></td>
-                    <td class='px-6 py-4'><?php echo $row['form_date_create']; ?></td>
-                    <td class='px-6 py-4'><?php echo $row['form_date_due']; ?></td>
-                    <td class='px-6 py-4'>
-                        <a href='st_form_details.php?form_id=<?php echo $row["form_id"]; ?>' class='font-medium text-blue-600 dark:text-blue-500 hover:underline'>View</a>
-                    </td>
-                </tr>
-            <?php } ?>
-        </tbody>
+        <?php
+
+        // Prepare and execute the SQL query
+        $sql = "SELECT
+            form_id,
+            form_title,
+            form_date_create,
+            form_date_due
+        FROM
+            form;";
+
+
+        $stmt = $conn->prepare($sql);
+        if ($stmt->execute()) {
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+        ?>
+                    <tbody>
+                        <tr class='border-b bg-gray-800 border-gray-700 hover:bg-gray-900'>
+                            <td scope='row' class='px-6 py-4 font-medium whitespace-nowrap text-black'>
+                                <a href='st_form_details.php?form_id=<?php echo $row["form_id"]; ?>' class='font-medium text-blue-500 hover:underline hover:text-blue-400'><?php echo $row['form_title']; ?></a>
+                            </td>
+                            <td class='px-6 py-4 '><?php echo $row['form_date_create']; ?></td>
+                            <td class='px-6 py-4 '><?php echo $row['form_date_due']; ?></td>
+                        </tr>
+                    </tbody>
+        <?php
+                }
+            } else {
+                echo "<tbody>";
+                echo "<tr class='border-b bg-gray-800 border-gray-700 hover:bg-gray-900'>";
+                echo "<td colspan='4' class='px-6 py-4 text-center'>No form found</td>";
+                echo "</tr>";
+                echo "</tbody>";
+            }
+        } else {
+            echo "Error executing the query: " . $stmt->error;
+        }
+        $stmt->close();
+        mysqli_close($conn);
+        ?>
     </table>
+
 </div>
 </body>
 
 </html>
 
-<?php
-mysqli_close($conn);
-?>
 
 
 

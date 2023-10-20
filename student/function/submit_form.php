@@ -19,10 +19,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["tag"])) {
             // Extract data from the form
             $form_id = $_POST['form_id'];
             $student_id = $_POST["student_id"];
-            $submission_date = date("Y-m-d");
+            $submission_date = date("Y-m-d h:i:s");
 
             // Insert data into the 'form_submit' table
-            $sql_submission = "INSERT INTO form_submit (form_id, student_id, SubmissionDate)
+            $sql_submission = "INSERT INTO form_submission (form_id, student_id, submissiondate)
                                 VALUES (?, ?, ?)";
             $stmt_submission = $pdo->prepare($sql_submission);
             $stmt_submission->bindParam(1, $form_id);
@@ -30,20 +30,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["tag"])) {
             $stmt_submission->bindParam(3, $submission_date);
 
             if ($stmt_submission->execute()) {
+
+                $type_id = $pdo->lastInsertId();
+                
                 // Upload files to the database
                 foreach ($_FILES["files"]["tmp_name"] as $key => $tmp_name) {
                     $file_name = $_FILES["files"]["name"][$key];
-                    $file_data = file_get_contents($tmp_name); // Get file content as binary data
+                    $file_data = file_get_contents($tmp_name);
 
-                    // Insert file data into the 'file' table
-                    $sql = "INSERT INTO file_form (file_name, file_content, form_id, uploader_id)
-                            VALUES (?, ?, ?, ?)";
-
+                    // Insert file data into the file_form table
+                    $sql = "INSERT INTO file (file_name, file_content, type_id, file_type, file_uploader_id)
+                            VALUES (?, ?, ?, ?, ?)";
                     $stmt = $pdo->prepare($sql);
+                    $file_type = "form_submission";
                     $stmt->bindParam(1, $file_name);
                     $stmt->bindParam(2, $file_data, PDO::PARAM_LOB);
-                    $stmt->bindParam(3, $form_id);
-                    $stmt->bindParam(4, $student_id);
+                    $stmt->bindParam(3, $type_id, PDO::PARAM_INT);
+                    $stmt->bindParam(4, $file_type); // Make this = "form"
+                    $stmt->bindParam(5, $student_id, PDO::PARAM_INT);
+                    $stmt->execute();
+
 
                     if (!$stmt->execute()) {
                         echo "Error inserting file: " . $stmt->errorInfo()[2]; // Display SQL error message
