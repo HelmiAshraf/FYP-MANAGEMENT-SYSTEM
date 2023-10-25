@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["tag"])) {
             $student_id = $_POST["student_id"];
             $submission_date = date("Y-m-d h:i:s");
 
-            // Insert data into the 'form_submit' table
+            // Insert data into the 'form_submission' table
             $sql_submission = "INSERT INTO form_submission (form_id, student_id, submissiondate)
                                 VALUES (?, ?, ?)";
             $stmt_submission = $pdo->prepare($sql_submission);
@@ -30,15 +30,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["tag"])) {
             $stmt_submission->bindParam(3, $submission_date);
 
             if ($stmt_submission->execute()) {
+                $form_submission_id = $pdo->lastInsertId();
 
-                $type_id = $pdo->lastInsertId();
-                
+                // Initialize type_id
+                $type_id = $form_submission_id;
+
                 // Upload files to the database
                 foreach ($_FILES["files"]["tmp_name"] as $key => $tmp_name) {
                     $file_name = $_FILES["files"]["name"][$key];
                     $file_data = file_get_contents($tmp_name);
 
-                    // Insert file data into the file_form table
+                    // Insert file data into the 'file' table
                     $sql = "INSERT INTO file (file_name, file_content, type_id, file_type, file_uploader_id)
                             VALUES (?, ?, ?, ?, ?)";
                     $stmt = $pdo->prepare($sql);
@@ -46,12 +48,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["tag"])) {
                     $stmt->bindParam(1, $file_name);
                     $stmt->bindParam(2, $file_data, PDO::PARAM_LOB);
                     $stmt->bindParam(3, $type_id, PDO::PARAM_INT);
-                    $stmt->bindParam(4, $file_type); // Make this = "form"
+                    $stmt->bindParam(4, $file_type); // Make this = "form_submission"
                     $stmt->bindParam(5, $student_id, PDO::PARAM_INT);
-                    $stmt->execute();
 
-
-                    if (!$stmt->execute()) {
+                    if ($stmt->execute()) {
+                        // Check if type_id is not set (first iteration), set it to the last inserted ID
+                        if ($type_id === null) {
+                            $type_id = $pdo->lastInsertId();
+                        }
+                    } else {
                         echo "Error inserting file: " . $stmt->errorInfo()[2]; // Display SQL error message
                     }
                 }

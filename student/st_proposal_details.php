@@ -75,7 +75,8 @@ $proposal_title = $_GET['proposal_title'];
                     $proposal_id = $_POST['proposal_id']; // Get proposal_id from URL parameter
                     if (!empty($proposal_id)) {
                         // Check if a submission with the same proposal_id and student_id already exists
-                        $check_submission_sql = "SELECT proposal_submission_id FROM proposal_submission WHERE proposal_id = ? AND student_id = ?";
+                        $check_submission_sql = "SELECT proposal_submission_id FROM proposal_submission 
+                                                WHERE proposal_id = ? AND student_id = ?";
                         $stmt_check_submission = $conn->prepare($check_submission_sql);
                         $stmt_check_submission->bind_param("ii", $proposal_id, $student_id);
                         $stmt_check_submission->execute();
@@ -100,7 +101,8 @@ $proposal_title = $_GET['proposal_title'];
                                         // Insert data into 'proposal_submission' table
                                         $submission_date = date("Y-m-d H:i:s"); // Current timestamp
 
-                                        $sql_submission = "INSERT INTO proposal_submission (proposal_id, student_id, supervisor_id, submissiondate) VALUES (?, ?, ?, ?)";
+                                        $sql_submission = "INSERT INTO proposal_submission 
+                                        (proposal_id, student_id, supervisor_id, submissiondate) VALUES (?, ?, ?, ?)";
                                         $stmt_submission = $conn->prepare($sql_submission);
                                         $stmt_submission->bind_param("iiis", $proposal_id, $student_id, $supervisor_id, $submission_date);
 
@@ -116,7 +118,9 @@ $proposal_title = $_GET['proposal_title'];
                                                 $file_type = "proposal submission"; // Assuming the type is 'proposal'
                                                 $file_uploader_id = $student_id; // User's ID
 
-                                                $sql_file = "INSERT INTO file (file_name, file_content, type_id, file_type, file_uploader_id) VALUES (?, ?, ?, ?, ?)";
+                                                $sql_file = "INSERT INTO file 
+                                                (file_name, file_content, type_id, file_type, file_uploader_id) 
+                                                VALUES (?, ?, ?, ?, ?)";
                                                 $stmt_file = $conn->prepare($sql_file);
                                                 $stmt_file->bind_param("ssiss", $file_name, $file_content, $file_type_id, $file_type, $file_uploader_id);
 

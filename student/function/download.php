@@ -1,46 +1,52 @@
 <?php
-// Check if 'file_id' is set in the URL
 if (isset($_GET['file_id'])) {
-    // Get the file_id from the URL
     $file_id = $_GET['file_id'];
 
-    // Include your database connection code here
-    include 'includes/db_connection.php';
+    // Replace with your actual database connection details
+    $servername = "localhost"; // Database server hostname or IP address
+    $dbusername = "root"; // Your database username
+    $dbpassword = ""; // Your database password
+    $dbname = "fypms"; // Name of your database
 
-    // Assuming you have a 'file' table with columns 'file_id', 'file_name', 'file_content'
+    // Establish a database connection
+    $conn = new mysqli($servername, $dbusername, $dbpassword, $dbname);
+
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    // Retrieve the file data from your database based on $file_id
     $sql = "SELECT file_name, file_content FROM file WHERE file_id = ?";
-
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $file_id);
 
     if ($stmt->execute()) {
         $result = $stmt->get_result();
 
-        if ($result->num_rows > 0) {
+        if ($result->num_rows == 1) {
             $row = $result->fetch_assoc();
             $file_name = $row['file_name'];
             $file_content = $row['file_content'];
 
-            // Set the appropriate headers for file download
-            header('Content-Type: application/octet-stream');
-            header('Content-Disposition: attachment; filename="' . $file_name . '"');
-            header('Content-Length: ' . strlen($file_content));
+            // Set response headers based on the file type
+            if (strpos($file_name, '.pdf') !== false) {
+                header("Content-Type: application/pdf");
+            } elseif (strpos($file_name, '.docx') !== false) {
+                header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+            }
+
+            header("Content-Disposition: inline; filename=$file_name");
 
             // Output the file content
             echo $file_content;
-        } else {
-            // Handle the case where no file with the specified file_id is found
-            echo "File not found.";
+            exit();
         }
-    } else {
-        echo "Error fetching file: " . $stmt->error;
     }
 
-    // Close the statement and database connection
-    $stmt->close();
+    // Close the database connection
     $conn->close();
 } else {
-    // Handle the case where 'file_id' is not set in the URL
-    echo "File ID not provided.";
+    // Invalid file parameter
+    echo "Invalid file parameter";
 }
 ?>
