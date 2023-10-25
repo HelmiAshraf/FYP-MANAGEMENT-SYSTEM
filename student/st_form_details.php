@@ -92,7 +92,7 @@ if (isset($_GET['form_id'])) {
                             if ($file_extension === 'pdf') {
                     ?>
                                 <li>
-                                    <a href="#" class="mb-3 text-base text-gray-200 view-file-link" data-file-extension="<?php echo $file_extension; ?>" data-file-content="<?php echo base64_encode($file_content); ?>" data-file-name="<?php echo $file_name; ?>">
+                                    <a href="data:application/pdf;base64,<?php echo base64_encode($file_content); ?>" target="_blank" class="mb-3 text-base text-gray-200" download="<?php echo $file_name; ?>">
                                         <?php echo $file_name; ?>
                                     </a>
                                 </li>
