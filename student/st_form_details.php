@@ -24,7 +24,7 @@ if (isset($_GET['form_id'])) {
             $form_date_due = $row['form_date_due'];
 ?>
 
-<!-- print form detail -->
+            <!-- print form detail -->
 
             <h1 class="text-3xl font-bold mb-4">Form Details</h1>
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg p-4 bg-gray-800 text-gray-400">
@@ -73,8 +73,8 @@ if (isset($_GET['form_id'])) {
                     <?php
                     // Now, fetch and display related files from the 'file' table
                     $sql = "SELECT file_name, file_content, type_id, file_type, file_uploader_id, file_id
-        FROM file
-        WHERE type_id = ?";
+    FROM file
+    WHERE type_id = ?";
 
                     $stmt = $conn->prepare($sql);
                     $stmt->bind_param("i", $form_id);
@@ -89,11 +89,18 @@ if (isset($_GET['form_id'])) {
 
                             $file_extension = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
 
-                            // Check if the file is a PDF or DOCX
-                            if ($file_extension === 'pdf' || $file_extension === 'docx') {
+                            if ($file_extension === 'pdf') {
                     ?>
                                 <li>
                                     <a href="#" class="mb-3 text-base text-gray-200 view-file-link" data-file-extension="<?php echo $file_extension; ?>" data-file-content="<?php echo base64_encode($file_content); ?>" data-file-name="<?php echo $file_name; ?>">
+                                        <?php echo $file_name; ?>
+                                    </a>
+                                </li>
+                            <?php
+                            } elseif ($file_extension === 'docx') {
+                            ?>
+                                <li>
+                                    <a href="function/download.php?file_id=<?php echo $file_id; ?>" download="<?php echo $file_name; ?>" class="mb-3 text-base text-gray-200">
                                         <?php echo $file_name; ?>
                                     </a>
                                 </li>
@@ -175,7 +182,7 @@ if (isset($_GET['form_id'])) {
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
                                     <th scope="col" class="px-6 py-3">
-                                    File Name
+                                        File Name
                                     </th>
                                     <th scope="col" class="px-6 py-3">
                                         Date Submit
@@ -187,7 +194,7 @@ if (isset($_GET['form_id'])) {
                             </thead>
                             <tbody>
                                 <?php
-// print submit form
+                                // print submit form
                                 // Prepare and execute the SQL query to retrieve submission files
                                 $sql = "SELECT fs.form_submission_id, fs.submissiondate, f.file_name
                                 FROM form_submission fs
@@ -226,7 +233,7 @@ if (isset($_GET['form_id'])) {
                                 }
 
                                 $stmt->close();
-                                
+
                 ?>
 
                 </tbody>
@@ -236,7 +243,7 @@ if (isset($_GET['form_id'])) {
                 } else {
                 ?>
 
-<!-- Submit form -->
+                    <!-- Submit form -->
 
                     <h1 class="text-3xl font-bold mb-4 mt-4">Submit Form</h1>
                     <div class="relative overflow-x-auto shadow-md sm:rounded-lg p-4 bg-gray-800">
