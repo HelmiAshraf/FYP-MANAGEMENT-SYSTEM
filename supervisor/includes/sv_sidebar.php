@@ -61,11 +61,25 @@ if ($stmt->execute()) {
                             <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
                         </svg>
                     </button>
-                    <a href="https://flowbite.com" class="flex ml-2 md:mr-24">
-                        <img src=".././assets/uitm.png" class="h-8 mr-3" alt="FlowBite Logo" />
-                        <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-white">FYPMS </span>
-                    </a>
+                    <div class="flex items-center ">
+                        <!-- First element -->
+                        <a href="https://flowbite.com" class="flex items-center ">
+                            <img src=".././assets/uitm.png" class="h-8 mr-3" alt="FlowBite Logo" />
+                            <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-white mr-2">FYPMS</span>
+                            <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-gray-200 italic mr-5">Supervisor</span>
+                        </a>
+                        <!-- Second element -->
+                        <a href="#" download="FYP-Computing-Essential.pdf" class="ml-2 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 ">
+                            <button class="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 hidden sm:flex">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                                </svg>
+                                FYP Computing Essential
+                            </button>
+                        </a>
+                    </div>
                 </div>
+
                 <div class="flex items-center">
                     <div class="flex items-center ml-3">
                         <div>
@@ -137,15 +151,6 @@ if ($stmt->execute()) {
                             <path d="M5.625 3.75a2.625 2.625 0 100 5.25h12.75a2.625 2.625 0 000-5.25H5.625zM3.75 11.25a.75.75 0 000 1.5h16.5a.75.75 0 000-1.5H3.75zM3 15.75a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75a.75.75 0 01-.75-.75zM3.75 18.75a.75.75 0 000 1.5h16.5a.75.75 0 000-1.5H3.75z" />
                         </svg>
                         <span class="ml-3">Task</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="sv_appointment.php" class="flex items-center p-2 rounded-lg text-white hover:bg-gray-700 group">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 transition duration-75 text-gray-400 group-hover:text-white">
-                            <path d="M12.75 12.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM7.5 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM8.25 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM9.75 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM10.5 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM12.75 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM14.25 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM15 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM16.5 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM15 12.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM16.5 13.5a.75.75 0 100-1.5.75.75 0 000 1.5z" />
-                            <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 017.5 3v1.5h9V3A.75.75 0 0118 3v1.5h.75a3 3 0 013 3v11.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V7.5a3 3 0 013-3H6V3a.75.75 0 01.75-.75zm13.5 9a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5z" clip-rule="evenodd" />
-                        </svg>
-                        <span class="flex-1 ml-3 whitespace-nowrap">Appointment</span>
                     </a>
                 </li>
                 <li>

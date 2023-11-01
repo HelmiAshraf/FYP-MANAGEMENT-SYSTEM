@@ -43,7 +43,7 @@ if ($stmt->execute()) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css" rel="stylesheet" />
-    
+
     <title>FYPMS - Student</title>
 </head>
 
@@ -59,10 +59,23 @@ if ($stmt->execute()) {
                             <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
                         </svg>
                     </button>
-                    <a href="https://flowbite.com" class="flex ml-2 md:mr-24">
-                        <img src=".././assets/uitm.png" class="h-8 mr-3" alt="FlowBite Logo" />
-                        <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-white">FYPMS </span>
-                    </a>
+                    <div class="flex items-center ">
+                        <!-- First element -->
+                        <a href="https://flowbite.com" class="flex items-center ">
+                            <img src=".././assets/uitm.png" class="h-8 mr-3" alt="FlowBite Logo" />
+                            <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-white mr-2">FYPMS</span>
+                            <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-gray-200 italic mr-5">Supervisor</span>
+                        </a>
+                        <!-- Second element -->
+                        <a href="#" download="FYP-Computing-Essential.pdf" class="ml-2 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 ">
+                            <button class="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 hidden sm:flex">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                                </svg>
+                                FYP Computing Essential
+                            </button>
+                        </a>
+                    </div>
                 </div>
                 <div class="flex items-center">
                     <div class="flex items-center ml-3">

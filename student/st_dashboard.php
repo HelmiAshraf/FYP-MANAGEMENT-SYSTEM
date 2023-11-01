@@ -1,4 +1,9 @@
 <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
         .scrollable-timeline {
             overflow-x: auto;
@@ -6,7 +11,7 @@
         }
 
         .scrollable-timeline::-webkit-scrollbar {
-            width: 4px;
+            width: 1px;
             /* Make the scrollbar slim */
         }
 
@@ -37,10 +42,6 @@
             /* Set the maximum width for text to display on one line */
         }
     </style>
-
-
-
-
 </head>
 
 <?php
@@ -48,7 +49,7 @@
 include 'includes/st_sidebar.php';
 
 
-// Connect to your database here
+$studentId = $_SESSION['user_id'];
 
 // Query to count total proposals
 $countProposalQuery = "SELECT COUNT(*) AS totalProposals FROM proposal";
@@ -57,7 +58,11 @@ $countTaskQuery = "SELECT COUNT(*) AS totalTasks FROM task";
 // Query to fetch task and proposal completion percentages
 $query = "SELECT task_pieChart, proposal_pieChart FROM graph_student WHERE student_id = ?";
 
-$studentId = $_SESSION['user_id'];
+// Default values for pie charts
+$totalProposals = 0;
+$totalTasks = 0;
+$completedProposals = 0;
+$completedTasks = 0;
 
 // Prepare and execute the count query for proposals
 $countProposalStmt = $conn->prepare($countProposalQuery);
@@ -66,9 +71,6 @@ $countProposalStmt->bind_result($totalProposals);
 
 // Fetch the total number of proposals
 if ($countProposalStmt->fetch()) {
-    // Now you have the total number of proposals
-
-    // Close the proposal count statement
     $countProposalStmt->close();
 
     // Prepare and execute the count query for tasks
@@ -78,9 +80,6 @@ if ($countProposalStmt->fetch()) {
 
     // Fetch the total number of tasks
     if ($countTaskStmt->fetch()) {
-        // Now you have the total number of tasks
-
-        // Close the task count statement
         $countTaskStmt->close();
 
         // Prepare and execute the query for task and proposal completion percentages
@@ -94,34 +93,12 @@ if ($countProposalStmt->fetch()) {
             // Calculate the percentage
             $completedTasks = $taskPieChart;
             $completedProposals = $proposalPieChart;
-            // $totalTasks and $totalProposals were obtained from the count queries
-        } else {
-            echo "Data not found for the given student ID.";
         }
 
-        // Close the task and proposal completion statement
         $stmt->close();
-    } else {
-        echo "Error counting total tasks.";
     }
-} else {
-    echo "Error counting total proposals.";
 }
-
-// Close the database connection
-// $conn->close();
-
-
-
 ?>
-
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
-
 
 
 <h1 class="text-4xl font-bold mb-3">Dashboard</h1>
@@ -133,24 +110,23 @@ if ($countProposalStmt->fetch()) {
                 <div class="w-1/2 h-60 text-center">
                     <canvas id="proposalPieChart"></canvas>
                 </div>
-                <div class="w-1/2 ml-6 flex flex-col ">
+                <div class="w-1/2 ml-6 flex flex-col">
                     <div>
                         <ul class="list-none">
                             <li>Total Proposal</li>
-                            <li><?php echo $totalProposals; ?></li> <!-- Use echo to display the PHP variable -->
+                            <li><?php echo $totalProposals; ?></li>
                         </ul>
                     </div>
                     <div>
                         <ul class="list-none">
                             <li>Complete Proposal</li>
-                            <li><?php echo $completedProposals; ?></li> <!-- Use echo to display the PHP variable -->
+                            <li><?php echo $completedProposals; ?></li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
     <div class="w-1/2 ml-6">
         <div class="bg-white rounded-lg shadow-md p-3 border">
             <h1 class="text-2xl font-semibold mb-4">Task Completion</h1>
@@ -162,13 +138,13 @@ if ($countProposalStmt->fetch()) {
                     <div>
                         <ul class="list-none">
                             <li>Total Task</li>
-                            <li><?php echo $totalTasks; ?></li> <!-- Use echo to display the PHP variable -->
+                            <li><?php echo $totalTasks; ?></li>
                         </ul>
                     </div>
                     <div>
                         <ul class="list-none">
                             <li>Complete Task</li>
-                            <li><?php echo $completedTasks; ?></li> <!-- Use echo to display the PHP variable -->
+                            <li><?php echo $completedTasks; ?></li>
                         </ul>
                     </div>
                 </div>
@@ -179,7 +155,74 @@ if ($countProposalStmt->fetch()) {
 
 
 
-<!-- form timeline -->
+<!-- proposal & task completion js -->
+<script>
+    // Replace these values with actual data
+    const completedProposals = <?php echo $completedProposals; ?>;
+    const totalProposals = <?php echo $totalProposals; ?>;
+    const completedTasks = <?php echo $completedTasks; ?>;
+    const totalTasks = <?php echo $totalTasks; ?>;
+
+    // Proposal completion chart
+    const proposalData = {
+        labels: ["Completed Proposals", "Incomplete Proposals"],
+        datasets: [{
+            data: [completedProposals, totalProposals - completedProposals],
+            backgroundColor: ["#1c64f2", "#e74694"],
+        }],
+    };
+
+    const proposal = document.getElementById("proposalPieChart").getContext("2d");
+    new Chart(proposal, {
+        type: "pie",
+        data: proposalData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: "bottom", // Display legend at the bottom
+                },
+            }
+        },
+    });
+
+    // Task completion chart
+    const taskData = {
+        labels: ["Completed Tasks", "Incomplete Tasks"],
+        datasets: [{
+            data: [completedTasks, totalTasks - completedTasks],
+            backgroundColor: ["#1c64f2", "#e74694"],
+        }],
+    };
+
+    const task = document.getElementById("taskPieChart").getContext("2d");
+    new Chart(task, {
+        type: "pie",
+        data: taskData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: "bottom", // Display legend at the bottom
+                },
+            }
+        },
+    });
+
+    // Sample data for the timeline chart
+    const timelineData = {
+        labels: ["2023-01-01", "2023-03-15", "2023-05-10", "2023-07-20"],
+        datasets: [{
+            label: "Form Completion",
+            backgroundColor: "rgba(54, 162, 235, 0.2)",
+            borderColor: "rgba(54, 162, 235, 1)",
+            borderWidth: 1,
+            data: [2, 4, 6, 8],
+        }, ],
+    };
+</script>
+
+
 <!-- form timeline -->
 <div class="w-full mt-5">
     <div class="bg-white rounded-lg shadow-md p-3 border">
@@ -252,7 +295,6 @@ if ($countProposalStmt->fetch()) {
 
                 $submission_stmt->close();
                 $form_stmt->close();
-                mysqli_close($conn);
                 ?>
             </ol>
         </div>
@@ -260,122 +302,173 @@ if ($countProposalStmt->fetch()) {
 </div>
 
 
+<?php
+
+// $servername = "localhost";
+// $dbusername = "root";
+// $dbpassword = "";
+// $dbname = "fypms";
+
+// // Create a database connection
+// $conn = new mysqli($servername, $dbusername, $dbpassword, $dbname);
+
+// // Check connection
+// if ($conn->connect_error) {
+//     die("Connection failed: " . $conn->connect_error);
+// }
+
+// Assuming you have started a session
 
 
+$studentId = $_SESSION['user_id'];
+
+$query = "SELECT gantt_chart.gantt_chart_id, gantt_chart.student_id, gantt_chart.supervisor_id, gantt_chart_task.gantt_chart_task_id, gantt_chart_task.task_name, gantt_chart_task.start_date, gantt_chart_task.end_date, gantt_chart_task.status 
+          FROM gantt_chart 
+          INNER JOIN gantt_chart_task ON gantt_chart.gantt_chart_id = gantt_chart_task.gantt_chart_id 
+          WHERE gantt_chart.student_id = ?";
+$stmt = mysqli_prepare($conn, $query);
+
+if ($stmt) {
+    mysqli_stmt_bind_param($stmt, "i", $studentId); // Assuming user_id is an integer
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+}
+
+// Create a PHP array to hold the Gantt chart data
+$data = array();
+
+while ($row = mysqli_fetch_assoc($result)) {
+    $ganttChartId = $row['gantt_chart_id'];
+    $studentId = $row['student_id'];
+    $supervisorId = $row['supervisor_id'];
+    $taskName = $row['task_name'];
+    $startDate = $row['start_date'] ? new DateTime($row['start_date']) : null;
+    $endDate = $row['end_date'] ? new DateTime($row['end_date']) : null;
+    $status = $row['status'];
+
+    $data[] = [
+        'GanttChartID' => $ganttChartId,
+        'StudentID' => $studentId,
+        'SupervisorID' => $supervisorId,
+        'TaskName' => $taskName,
+        'StartDate' => $startDate ? $startDate->format('Y, n, j') : null,
+        'EndDate' => $endDate ? $endDate->format('Y, n, j') : null,
+        'Status' => $status,
+    ];
+}
+
+// Convert the PHP array to JSON format
+$jsonData = json_encode($data);
+?>
+
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<style>
+    .bar {
+        fill: steelblue;
+    }
+</style>
 
 <div class="w-full mt-5">
-    <div class="bg-white rounded-lg shadow-md p-3 border ">
-        <h1 class="text-2xl font-semibold mb-4">Your Development and Writing Timeline</h1>
-        <div class="gantt-container ">
-            <div id="gantt_chart_div"></div>
+    <div class="bg-white rounded-lg shadow-md p-3 border">
+        <h1 class="text-2xl font-semibold mb-4">Form Completion Timeline</h1>
+        <div class="scrollable-timeline" style="width: 100%;">
+            <div class="gantt-container">
+
+                <?php
+                // Check if there is Gantt chart data for the student
+                if (count($data) > 0) {
+                    // Display the Gantt chart SVG
+                    echo '<div id="gantt-chart">';
+                } else {
+                    // Display a message if no Gantt chart data is available
+                    echo "Your supervisor has not created a Gantt chart for you.";
+                }
+                ?>
+
+            </div>
         </div>
     </div>
 </div>
 
 
 
+
 <script>
-    // Replace these values with actual data
-    const completedProposals = <?php echo $completedProposals; ?>;
-    const totalProposals = <?php echo $totalProposals; ?>;
-    const completedTasks = <?php echo $completedTasks; ?>;
-    const totalTasks = <?php echo $totalTasks; ?>;
+    // Your JSON data
+    var jsonData = <?php echo $jsonData; ?>; // Insert the JSON data here
 
-    // Proposal completion chart
-    const proposalData = {
-        labels: ["Completed Proposals", "Incomplete Proposals"],
-        datasets: [{
-            data: [completedProposals, totalProposals - completedProposals],
-            backgroundColor: ["#1c64f2", "#e74694"],
-        }],
+    // Width and height of the chart container
+    var margin = {
+        top: 20,
+        right: 100,
+        bottom: 40,
+        left: 100
     };
+    var width = 1500 - margin.left - margin.right;
+    var height = 400 - margin.top - margin.bottom;
 
-    const proposal = document.getElementById("proposalPieChart").getContext("2d");
-    new Chart(proposal, {
-        type: "pie",
-        data: proposalData,
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: "bottom", // Display legend at the bottom
-                },
-            }
-        },
+    // Create an SVG element
+    var svg = d3.select("#gantt-chart") // Select the existing gantt-chart div
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // Gantt chart data processing and rendering
+    var taskNames = jsonData.map(function(d) {
+        return d.TaskName;
     });
 
-    // Task completion chart
-    const taskData = {
-        labels: ["Completed Tasks", "Incomplete Tasks"],
-        datasets: [{
-            data: [completedTasks, totalTasks - completedTasks],
-            backgroundColor: ["#1c64f2", "#e74694"],
-        }],
-    };
-
-    const task = document.getElementById("taskPieChart").getContext("2d");
-    new Chart(task, {
-        type: "pie",
-        data: taskData,
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: "bottom", // Display legend at the bottom
-                },
-            }
-        },
+    var startDate = d3.min(jsonData, function(d) {
+        return new Date(d.StartDate);
     });
 
-    // Sample data for the timeline chart
-    const timelineData = {
-        labels: ["2023-01-01", "2023-03-15", "2023-05-10", "2023-07-20"],
-        datasets: [{
-            label: "Form Completion",
-            backgroundColor: "rgba(54, 162, 235, 0.2)",
-            borderColor: "rgba(54, 162, 235, 1)",
-            borderWidth: 1,
-            data: [2, 4, 6, 8],
-        }, ],
-    };
+    // Set the end date to one year from the start date
+    var endDate = new Date(startDate);
+    endDate.setFullYear(startDate.getFullYear() + 1);
+
+    var xScale = d3.scaleTime()
+        .domain([startDate, endDate])
+        .range([0, width]);
+
+    var yScale = d3.scaleBand()
+        .domain(taskNames)
+        .range([0, height])
+        .padding(0.1);
+
+    svg.selectAll(".bar")
+        .data(jsonData)
+        .enter()
+        .append("rect")
+        .attr("class", "bar")
+        .attr("x", function(d) {
+            return xScale(new Date(d.StartDate));
+        })
+        .attr("y", function(d) {
+            return yScale(d.TaskName);
+        })
+        .attr("width", function(d) {
+            return xScale(new Date(d.EndDate)) - xScale(new Date(d.StartDate));
+        })
+        .attr("height", yScale.bandwidth());
+
+    // Add axis
+    var xAxis = d3.axisBottom(xScale).tickFormat(d3.timeFormat("%Y, %m, %d")).ticks(d3.timeMonth.every(1));
+    var yAxis = d3.axisLeft(yScale);
+
+    svg.append("g")
+        .attr("class", "x-axis")
+        .call(xAxis)
+        .attr("transform", "translate(0," + height + ")");
+
+    svg.append("g")
+        .attr("class", "y-axis")
+        .call(yAxis);
+
+    // Style the date labels using Tailwind CSS
+    d3.selectAll(".x-axis text").attr("class", "text-sm text-gray-600");
 </script>
-<script type="text/javascript">
-    google.charts.load('current', {
-        'packages': ['gantt']
-    });
-    google.charts.setOnLoadCallback(drawChart);
-
-    function drawChart() {
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Task ID');
-        data.addColumn('string', 'Task Name');
-        data.addColumn('string', 'Resource');
-        data.addColumn('date', 'Start Date');
-        data.addColumn('date', 'End Date');
-        data.addColumn('number', 'Duration');
-        data.addColumn('number', 'Percent Complete');
-        data.addColumn('string', 'Dependencies');
-
-        data.addRows([
-            ['Task1', 'Task 1', 'Resource 1', new Date(2023, 0, 1), new Date(2023, 2, 31), null, 50, null],
-            ['Task2', 'Task 2', 'Resource 2', new Date(2023, 3, 1), new Date(2023, 5, 30), null, 30, 'Task1'],
-            ['Task3', 'Task 3', 'Resource 3', new Date(2023, 5, 1), new Date(2023, 8, 31), null, 40, 'Task1'],
-            ['Task4', 'Task 4', 'Resource 4', new Date(2023, 6, 1), new Date(2023, 2, 31), null, 50, null],
-            ['Task5', 'Task 5', 'Resource 5', new Date(2023, 7, 1), new Date(2023, 5, 30), null, 30, 'Task1'],
-            ['Task6', 'Task 6', 'Resource 6', new Date(2023, 8, 1), new Date(2023, 8, 31), null, 40, 'Task1'],
-            // Add more tasks as needed
-        ]);
-
-
-        var options = {
-            height: 350,
-        };
-
-        var chart = new google.visualization.Gantt(document.getElementById('gantt_chart_div'));
-        chart.draw(data, options);
-    }
-</script>
-
 
 
 <!-- content end -->
