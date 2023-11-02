@@ -395,7 +395,12 @@ $jsonData = json_encode($data);
 
 <script>
     // Your JSON data
-    var jsonData = <?php echo $jsonData; ?>; // Insert the JSON data here
+    var jsonData = <?php echo $jsonData; ?>;
+
+    // Sort the data by start date in ascending order
+    jsonData.sort(function(a, b) {
+        return new Date(a.StartDate) - new Date(b.StartDate);
+    });
 
     // Width and height of the chart container
     var margin = {
@@ -407,14 +412,6 @@ $jsonData = json_encode($data);
     var width = 1500 - margin.left - margin.right;
     var height = 400 - margin.top - margin.bottom;
 
-    // Create an SVG element
-    var svg = d3.select("#gantt-chart") // Select the existing gantt-chart div
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
     // Gantt chart data processing and rendering
     var taskNames = jsonData.map(function(d) {
         return d.TaskName;
@@ -424,18 +421,28 @@ $jsonData = json_encode($data);
         return new Date(d.StartDate);
     });
 
-    // Set the end date to one year from the start date
-    var endDate = new Date(startDate);
-    endDate.setFullYear(startDate.getFullYear() + 1);
+    var endDate = d3.max(jsonData, function(d) {
+        return new Date(d.EndDate);
+    });
 
+    // Create an xScale based on the start and end dates
     var xScale = d3.scaleTime()
         .domain([startDate, endDate])
         .range([0, width]);
 
+    // Adjust the yScale domain to consider the earliest start date
     var yScale = d3.scaleBand()
         .domain(taskNames)
         .range([0, height])
         .padding(0.1);
+
+    // Create an SVG element
+    var svg = d3.select("#gantt-chart")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     svg.selectAll(".bar")
         .data(jsonData)
@@ -453,15 +460,15 @@ $jsonData = json_encode($data);
         })
         .attr("height", yScale.bandwidth());
 
-    // Add axis
+    // Create and add the x-axis
     var xAxis = d3.axisBottom(xScale).tickFormat(d3.timeFormat("%Y, %m, %d")).ticks(d3.timeMonth.every(1));
-    var yAxis = d3.axisLeft(yScale);
-
     svg.append("g")
         .attr("class", "x-axis")
         .call(xAxis)
         .attr("transform", "translate(0," + height + ")");
 
+    // Create and add the y-axis
+    var yAxis = d3.axisLeft(yScale);
     svg.append("g")
         .attr("class", "y-axis")
         .call(yAxis);
@@ -469,6 +476,8 @@ $jsonData = json_encode($data);
     // Style the date labels using Tailwind CSS
     d3.selectAll(".x-axis text").attr("class", "text-sm text-gray-600");
 </script>
+
+
 
 
 <!-- content end -->

@@ -128,12 +128,12 @@ if ($stmt->execute()) {
         <div class="h-full px-3 pb-4 overflow-y-auto bg-gray-800">
             <ul class="space-y-2 font-medium">
                 <li>
-                    <a href="sv_progress.php" class="flex items-center p-2 rounded-lg text-white hover:bg-gray-700 group">
+                    <a href="sv_supervisee.php" class="flex items-center p-2 rounded-lg text-white hover:bg-gray-700 group">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 transition duration-75 text-gray-400 group-hover:text-white">
                             <path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z" clip-rule="evenodd" />
                             <path fill-rule="evenodd" d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z" clip-rule="evenodd" />
                         </svg>
-                        <span class="ml-3">Progress</span>
+                        <span class="ml-3">Supervisee</span>
                     </a>
                 </li>
                 <li>
@@ -158,7 +158,7 @@ if ($stmt->execute()) {
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 transition duration-75 text-gray-400 group-hover:text-white">
                             <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd" />
                         </svg>
-                        <span class="flex-1 ml-3 whitespace-nowrap">Student</span>
+                        <span class="flex-1 ml-3 whitespace-nowrap">Propose  Project</span>
                     </a>
                 </li>
             </ul>
