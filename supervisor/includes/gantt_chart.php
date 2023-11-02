@@ -104,7 +104,7 @@
                                 <?php echo $end_date; ?>
                             </td>
                             <td class='px-6 py-4 text-center'>
-                                <a href="#" class="user_edit font-medium text-blue-600 dark:text-blue-500 hover:underline edit-link" data-task-id="<?php echo $row['gantt_chart_task_id']; ?>">Edit <?php echo $row['gantt_chart_task_id']; ?></a>
+                                <a href="#" class="user_edit font-medium text-blue-600 dark:text-blue-500 hover:underline edit-link" data-task-id="<?php echo $row['gantt_chart_task_id']; ?>"> Edit </a>
                             </td>
                         </tr>
 

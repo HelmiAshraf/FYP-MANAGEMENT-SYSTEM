@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: student/st_available_sv.php");
             exit();
         } elseif ($user_role == 'supervisor') {
-            header("Location: supervisor/sv_progress.php");
+            header("Location: supervisor/sv_supervisee.php");
             exit();
         } else {
             // Handle other roles or scenarios

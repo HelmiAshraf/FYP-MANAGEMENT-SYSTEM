@@ -52,7 +52,7 @@ include 'includes/sv_sidebar.php';
                     </a>
                 </td>
        
-                <td class='px-6 py-4 text-center'>student/st_proposal_details.php></td>
+                <td class='px-6 py-4 text-center'><?php echo $row['st_part']; ?> </td>
                 <td class='px-6 py-4 text-center'>
                     <a href="sv_supervisee_detail.php?st_id=<?php echo $row['st_id']; ?>" class='text-blue-500 hover:underline hover:text-blue-400'>
                         View
