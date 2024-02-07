@@ -1,8 +1,6 @@
 <?php
-$servername = "localhost";
-$dbusername = "root";
-$dbpassword = "";
-$dbname = "fypms";
+include '../db_credentials.php';
+
 
 // Create a database connection
 $conn = new mysqli($servername, $dbusername, $dbpassword, $dbname);

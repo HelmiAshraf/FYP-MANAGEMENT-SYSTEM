@@ -4,7 +4,7 @@ session_start();
 
 // Check if the user is logged in; if not, redirect to the login page
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: .././logout.php");
     exit();
 }
 
@@ -13,27 +13,35 @@ include '../db.php';
 // Retrieve user data based on the user's login ID
 $user_id = $_SESSION['user_id']; // Assuming you store the login ID in a session variable
 
-// Prepare and execute a query to retrieve user details
-$sql = "SELECT st_name, st_email,st_class, TO_BASE64(st_image) AS st_image_base64 FROM student WHERE st_id = ?";
+// Prepare and execute a query to retrieve user details including the image path
+$sql = "SELECT st_name, st_email, st_image FROM student WHERE st_id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $user_id);
 
 if ($stmt->execute()) {
     // Bind the results to variables
-    $stmt->bind_result($user_name, $user_email, $user_class, $st_image_base64);
+    $stmt->bind_result($user_name, $user_email, $st_image_path);
 
     // Fetch the data
     $stmt->fetch();
 
     // Close the statement
     $stmt->close();
+
+    // Check if the image path exists
+    if (file_exists($st_image_path)) {
+        // Read the image content and convert it to base64
+        $st_image_base64 = base64_encode(file_get_contents($st_image_path));
+    } else {
+        // Set a default image if the path doesn't exist
+        $default_image_path = '../file/image/user.png';
+        $st_image_base64 = base64_encode(file_get_contents($default_image_path));
+    }
 } else {
     echo "Error executing the query: " . $conn->error;
 }
-
-// Close the database connection
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -61,13 +69,12 @@ if ($stmt->execute()) {
                     </button>
                     <div class="flex items-center ">
                         <!-- First element -->
-                        <a href="https://flowbite.com" class="flex items-center ">
+                        <a href="#" class="flex items-center ">
                             <img src=".././assets/uitm.png" class="h-8 mr-3" alt="FlowBite Logo" />
                             <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-white mr-2">FYPMS</span>
-                            <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-gray-200 italic mr-5">Supervisor</span>
                         </a>
                         <!-- Second element -->
-                        <a href="#" download="FYP-Computing-Essential.pdf" class="ml-2 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 ">
+                        <a href=".././FYP-Computing-Essential.pdf" download="FYP-Computing-Essential.pdf" class="ml-2 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2">
                             <button class="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 hidden sm:flex">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
@@ -79,12 +86,6 @@ if ($stmt->execute()) {
                 </div>
                 <div class="flex items-center">
                     <div class="flex items-center ml-3">
-                        <div>
-                            <p class="text-sm text-gray-300 font-semibold" role="none">
-                                <?php echo $user_class; // Display the user's name 
-                                ?>
-                            </p>
-                        </div>
                         <div class="ml-4">
                             <p class="text-sm text-gray-300 font-semibold" role="none">
                                 <?php echo $user_name; // Display the user's name 
@@ -92,7 +93,7 @@ if ($stmt->execute()) {
                             </p>
                         </div>
                         <div class="ml-4">
-                            <button type="button" class="flex text-sm bg-gray-800 rounded-lg -full focus:ring-4 focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
+                            <button type="button" class="flex text-sm bg-gray-800 rounded-lg -full focus:ring-4 focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user" data-dropdown-placement="bottom-start">
                                 <span class="sr-only">Open user menu</span>
                                 <img class="w-8 h-8 rounded-lg -full" src="data:image/jpeg;base64,<?php echo $st_image_base64; ?>" alt="User Photo">
                             </button>
@@ -106,7 +107,7 @@ if ($stmt->execute()) {
                             ?>
                         </p>
                         <p class="text-sm font-medium truncate text-gray-300" role="none">
-                            <?php echo $user_email; // Display the user's email 
+                            <?php echo $user_id; // Display the user's email 
                             ?>
                         </p>
                     </div>
@@ -118,11 +119,8 @@ if ($stmt->execute()) {
                             <a href=".././logout.php" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white" role="menuitem">Sign out</a>
                         </li>
                     </ul>
-                    <script type="text/javascript" src=".././script/dropdown.js"></script>
                 </div>
             </div>
-        </div>
-        </div>
         </div>
     </nav>
 
@@ -139,12 +137,21 @@ if ($stmt->execute()) {
                     </a>
                 </li>
                 <li>
-                    <a href="st_proposal.php" class="flex items-center p-2 rounded-lg text-white hover:bg-gray-700 group">
+                    <a href="st_assignment.php" class="flex items-center p-2 rounded-lg text-white hover:bg-gray-700 group">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 transition duration-75 text-gray-400 group-hover:text-white">
                             <path fill-rule="evenodd" d="M7.502 6h7.128A3.375 3.375 0 0118 9.375v9.375a3 3 0 003-3V6.108c0-1.505-1.125-2.811-2.664-2.94a48.972 48.972 0 00-.673-.05A3 3 0 0015 1.5h-1.5a3 3 0 00-2.663 1.618c-.225.015-.45.032-.673.05C8.662 3.295 7.554 4.542 7.502 6zM13.5 3A1.5 1.5 0 0012 4.5h4.5A1.5 1.5 0 0015 3h-1.5z" clip-rule="evenodd" />
                             <path fill-rule="evenodd" d="M3 9.375C3 8.339 3.84 7.5 4.875 7.5h9.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-9.75A1.875 1.875 0 013 20.625V9.375zM6 12a.75.75 0 01.75-.75h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75H6.75a.75.75 0 01-.75-.75V12zm2.25 0a.75.75 0 01.75-.75h3.75a.75.75 0 010 1.5H9a.75.75 0 01-.75-.75zM6 15a.75.75 0 01.75-.75h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75H6.75a.75.75 0 01-.75-.75V15zm2.25 0a.75.75 0 01.75-.75h3.75a.75.75 0 010 1.5H9a.75.75 0 01-.75-.75zM6 18a.75.75 0 01.75-.75h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75H6.75a.75.75 0 01-.75-.75V18zm2.25 0a.75.75 0 01.75-.75h3.75a.75.75 0 010 1.5H9a.75.75 0 01-.75-.75z" clip-rule="evenodd" />
                         </svg>
-                        <span class="flex-1 ml-3 whitespace-nowrap">Proposal</span>
+                        <span class="flex-1 ml-3 whitespace-nowrap">Assignment</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="st_document.php" class="flex items-center p-2 rounded-lg text-white hover:bg-gray-700 group">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 transition duration-75 text-gray-400 group-hover:text-white">
+                            <path d="M12.75 12.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM7.5 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM8.25 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM9.75 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM10.5 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM12.75 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM14.25 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM15 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM16.5 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM15 12.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM16.5 13.5a.75.75 0 100-1.5.75.75 0 000 1.5z" />
+                            <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 017.5 3v1.5h9V3A.75.75 0 0118 3v1.5h.75a3 3 0 013 3v11.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V7.5a3 3 0 013-3H6V3a.75.75 0 01.75-.75zm13.5 9a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5z" clip-rule="evenodd" />
+                        </svg>
+                        <span class="flex-1 ml-3 whitespace-nowrap">Documents</span>
                     </a>
                 </li>
                 <li>
@@ -155,15 +162,7 @@ if ($stmt->execute()) {
                         <span class="ml-3">Task</span>
                     </a>
                 </li>
-                <li>
-                    <a href="st_form.php" class="flex items-center p-2 rounded-lg text-white hover:bg-gray-700 group">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 transition duration-75 text-gray-400 group-hover:text-white">
-                            <path d="M12.75 12.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM7.5 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM8.25 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM9.75 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM10.5 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM12.75 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM14.25 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM15 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM16.5 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM15 12.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM16.5 13.5a.75.75 0 100-1.5.75.75 0 000 1.5z" />
-                            <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 017.5 3v1.5h9V3A.75.75 0 0118 3v1.5h.75a3 3 0 013 3v11.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V7.5a3 3 0 013-3H6V3a.75.75 0 01.75-.75zm13.5 9a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5z" clip-rule="evenodd" />
-                        </svg>
-                        <span class="flex-1 ml-3 whitespace-nowrap">form</span>
-                    </a>
-                </li>
+
                 <!-- <li>
                     <a href="st_appointment.php" class="flex items-center p-2 rounded-lg text-white hover:bg-gray-700 group">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 transition duration-75 text-gray-400 group-hover:text-white">
@@ -176,9 +175,11 @@ if ($stmt->execute()) {
             </ul>
         </div>
     </aside>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.1.1/flowbite.min.js"></script>
+
     <div class="p-4 sm:ml-64">
 
-        <div class="p-4 mt-10">
+        <div class="p-4 mt-8">
 
             <div class="">
                 <!-- content will show here -->

@@ -2,11 +2,8 @@
 if (isset($_GET['file_id'])) {
     $file_id = $_GET['file_id'];
 
-    // Replace with your actual database connection details
-    $servername = "localhost"; // Database server hostname or IP address
-    $dbusername = "root"; // Your database username
-    $dbpassword = ""; // Your database password
-    $dbname = "fypms"; // Name of your database
+    include '../../db_credentials.php';
+
 
     // Establish a database connection
     $conn = new mysqli($servername, $dbusername, $dbpassword, $dbname);
