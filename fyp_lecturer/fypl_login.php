@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html>
 
 <head>
-    <title>FYP Lecturer Login Page</title>
+    <title>FYP Course Lecturer Login Page</title>
     <script src=" https://cdn.tailwindcss.com">
     </script>
 </head>
@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
                 <h1 class="flex items-center text-xl tracking-tight md:text-2xl text-white font-bold">
-                    FYP Lecturer Sign in
+                    FYP Course Lecturer Sign in
                 </h1>
                 <?php if (!empty($message)) : ?>
                     <p class="text-red-500 text-sm"><?php echo htmlspecialchars($message); ?></p>

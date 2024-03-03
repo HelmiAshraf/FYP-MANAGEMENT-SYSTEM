@@ -11,7 +11,7 @@
 
 <body>
     <header>
-        <nav class=" border-gray-200 px-4 lg:px-6 py-2.5 bg-gray-800">
+        <nav class=" border-gray-200 px-4 lg:px-6 py-2.5 bg-gray-900">
             <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
                 <a href="#" class="flex items-center">
                     <img src="assets/uitm.png" class="mr-3 h-6 sm:h-9" alt="UITM Logo" />
@@ -19,7 +19,7 @@
                 </a>
                 <div class="flex items-center lg:order-2">
                     <a href="login.php" class="text-white font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5  hover:font-extrabold focus:outline-none mr-2">Sign in</a>
-                    <a href="fyp_lecturer/fypl_login.php" class="text-white font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5  hover:font-extrabold focus:outline-none mr-4">FYP lecturer Sign In</a>
+                    <a href="fyp_lecturer/fypl_login.php" class="text-white font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5  hover:font-extrabold focus:outline-none mr-4">FYPCL Sign In</a>
                     <a href="register.php" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2">Register</a>
                 </div>
             </div>
@@ -53,7 +53,7 @@
 
         <!-- Lecturer Features -->
         <div class="bg-gray-800 rounded-lg shadow-lg p-6 text-white">
-            <h2 class="text-2xl font-semibold mb-4">For FYP Lecturers</h2>
+            <h2 class="text-2xl font-semibold mb-4">For FYP Course Lecturer</h2>
             <p>Supervise multiple student projects, offer academic support, and assess project submissions.</p>
         </div>
 

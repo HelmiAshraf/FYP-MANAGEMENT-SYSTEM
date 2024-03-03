@@ -49,7 +49,7 @@ try {
                 // Get the doc_id that was just inserted
                 $doc_id = $pdo->lastInsertId();
 
-                $file_type = 'dfypl'; // dfypl = document final year project lecturer
+                $file_type = 'dfypl'; // dfypl = document FYP Course Lecturer
                 $file_name = $file_type . '_' . $doc_id . '_' . $_FILES["files"]["name"][$key];
 
                 // Insert file data into the file_path table using the retrieved doc_id and updated file name
@@ -100,7 +100,7 @@ try {
 
 <div class="flex justify-between items-center">
     <div>
-        <p class="inline-flex items-center text-sm font-medium text-gray-400">Login as: Final Year Project Lecturer</p>
+        <p class="inline-flex items-center text-sm font-medium text-gray-400">Login as: FYP Course Lecturer</p>
     </div>
     <div class="ml-4">
         <nav class="flex" aria-label="Breadcrumb">
@@ -168,7 +168,7 @@ try {
                 <input type="file" name="files[]" id="fileInput" multiple onchange="displaySelectedFile(this)" class="block w-full text-sm border rounded-lg cursor-pointer text-gray-400 focus:outline-none bg-gray-700 border-gray-600 placeholder-gray-400" aria-describedby="user_avatar_help" required>
                 <p class="mt-1 text-sm text-gray-300" id="file_input_help">Only PDF files are accepted</p>
                 <!-- Display selected files -->
-                <div id="selected-files" class="mt-2 text-gray-300 " ></div>
+                <div id="selected-files" class="mt-2 text-gray-300 "></div>
             </div>
             <?php
             // Fetch batch_id for CSP600

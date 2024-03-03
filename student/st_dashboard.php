@@ -90,6 +90,46 @@ $completeAssignmentStmt->close();
                                     <span class="font-bold text-gray-900"><?php echo $completedAssignments; ?></span>
                                 </li>
                             </ul>
+
+
+                            <div class="relative overflow-x-auto">
+                                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-g">
+                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                        <tr>
+                                            <th scope="col" class="px-6 py-3">
+                                                Product name
+                                            </th>
+                                            <th scope="col" class="px-6 py-3">
+                                                Color
+                                            </th>
+                                            <th scope="col" class="px-6 py-3">
+                                                Category
+                                            </th>
+                                            <th scope="col" class="px-6 py-3">
+                                                Price
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                Apple MacBook Pro 17"
+                                            </th>
+                                            <td class="px-6 py-4">
+                                                Silver
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                Laptop
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                $2999
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+
                         </div>
                     <?php } else { ?>
                         <div class="w-full p-8 text-center">
@@ -100,6 +140,7 @@ $completeAssignmentStmt->close();
             </div>
         </div>
     </div>
+
 
     <script>
         // Replace these values with actual data
@@ -318,7 +359,14 @@ GROUP BY
 //!! GANTT CHART
 $studentId = $_SESSION['user_id'];
 
-$query = "SELECT gantt_chart.gantt_chart_id, gantt_chart.student_id, gantt_chart.supervisor_id, gantt_chart_task.gantt_chart_task_id, gantt_chart_task.task_name, gantt_chart_task.start_date, gantt_chart_task.end_date, gantt_chart_task.status 
+$query = "SELECT gantt_chart.gantt_chart_id, 
+            gantt_chart.student_id, 
+            gantt_chart.supervisor_id, 
+            gantt_chart_task.gantt_chart_task_id, 
+            gantt_chart_task.task_name, 
+            gantt_chart_task.start_date, 
+            gantt_chart_task.end_date, 
+            gantt_chart_task.status 
           FROM gantt_chart 
           INNER JOIN gantt_chart_task ON gantt_chart.gantt_chart_id = gantt_chart_task.gantt_chart_id 
           WHERE gantt_chart.student_id = ?";

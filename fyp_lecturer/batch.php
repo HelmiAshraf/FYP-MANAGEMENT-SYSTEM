@@ -8,7 +8,7 @@ $user_id = $_SESSION["user_id"]; // Assuming you have stored the logged-in user'
 
 <div class="flex justify-between items-center">
     <div>
-        <p class="inline-flex items-center text-sm font-medium text-gray-400">Login as: Final Year Project Lecturer</p>
+        <p class="inline-flex items-center text-sm font-medium text-gray-400">Login as: FYP Course Lecturer</p>
     </div>
     <div class="ml-4">
         <nav class="flex" aria-label="Breadcrumb">
@@ -182,7 +182,7 @@ $user_id = $_SESSION["user_id"]; // Assuming you have stored the logged-in user'
     <table class="w-full text-sm text-left text-gray-400">
         <thead class="text-xs uppercase bg-gray-700 text-gray-400">
             <tr class="">
-              
+
                 <th scope="col" class="px-6 py-3">
                     Batch
                 </th>
@@ -209,10 +209,10 @@ $user_id = $_SESSION["user_id"]; // Assuming you have stored the logged-in user'
                 echo "Error: " . mysqli_error($conn);
             } else {
                 // Initialize a counter variable
-             
+
                 while ($row = mysqli_fetch_assoc($result)) { ?>
                     <tr class='border-b bg-gray-800 border-gray-700 hover:bg-gray-900'>
-                     
+
                         <td scope='row' class='px-6 py-4 font-medium whitespace-nowrap text-white'><?php echo  $row['batch_name']; ?></td>
                         <td class='px-6 py-4'>
                             <?php
@@ -228,7 +228,7 @@ $user_id = $_SESSION["user_id"]; // Assuming you have stored the logged-in user'
                         </td>
                     </tr>
             <?php
-              
+
                 }
             }
             ?>

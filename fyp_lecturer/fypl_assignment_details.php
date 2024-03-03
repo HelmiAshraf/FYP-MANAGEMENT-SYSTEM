@@ -66,7 +66,7 @@ if (isset($_GET['ass_id'])) {
 
             <div class="flex justify-between items-center">
                 <div>
-                    <p class="inline-flex items-center text-sm font-medium text-gray-400">Login as: Final Year Project Lecturer</p>
+                    <p class="inline-flex items-center text-sm font-medium text-gray-400">Login as: FYP Course Lecturer</p>
                 </div>
                 <div class="ml-4">
                     <nav class="flex" aria-label="Breadcrumb">
